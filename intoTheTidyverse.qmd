@@ -1,0 +1,66 @@
+---
+title: "intoTheTidyverse"
+---
+
+The tidyverse is it's own universe of code and style.
+
+```{r}
+BiocManager::install("tidyverse")
+library(tidyverse)
+```
+
+## The Wilder eDNA dataset is tidy
+
+A table is tidy if each variable is a separate column and each row stores separate cases. Load in the samples and records csv files with read_csv, then use the \|\> ("pipe") to pass the objects to the View() function. Pipe the samples object to the spec() function to learn what type of data is stored in each column.
+
+```{r}
+samples <- read_csv("~/Desktop/intoTheTidyverse/samples.csv")
+samples |> View()
+
+records <- read_csv("~/Desktop/intoTheTidyverse/records.csv")
+records |> View()
+
+samples |> spec()
+# Shows the column specifications or types. E.g., SID is col_double() - any non-interger number, collection date is a date. 
+```
+
+Let's explore this dataset with the tidyverse. We will assume no knowledge of the data (simulating the all-too-common "we've got this dataset from a past lab member, see if you can..."). When we find ourselves with a dataset like this we might have specific questions we want to answer, and sometimes we won't yet know what those questions are. Let's start with some basic questions and work our way up in complexity.
+
+How is data collection changing over time in terms of the amount of sequencing being done? In other words, is this company growing in popularity?
+
+#### *Exercise: Look at the sample and records objects, and see what data you could use to get an answer to this question.*
+
+First, it's worth noting that there are different ways to go about this. We are just going to pick one approach to demonstrate some basic data manipulation. Since we don't have any prior knowledge about what these columns are, we are going to make some educated guesses about what they represent.
+
+A straightforward approach would be to look at the column called CollectionDate, and count the number of samples that were collected per year. To do that, we need to re-format the data from it's current format (*e.g.,* 2022-12-12) to just the year (2022), group rows based on the year, and then count the number of rows in each group. 
+
+*What steps do we need to take to use this data to answer our question?*
+
+First we need to group our rows into years and then sum the total number of sequences from each year. This involves: 
+- Re-formatting the data into year (e.g., 2022 instead of 2022-12-12) with the format function and temporarily storing it as a column called "year" with the mutate function.
+
+- Grouping the new "year" column with the group_by function.
+
+- Count the number of rows that are in each of our groups (years) with the summarise function. 
+
+```{r}
+samples |> mutate(year = format(CollectionDate, "%Y")) |> group_by(year) |> summarise(samples = n())
+```
+
+
+Next, let's look at how we can do more than just count the number of rows in a group - we can also, for example, sum up all the values in one of the other columns.
+
+We will start with the variable called CollectionDate in the samples object and use it alongside the TICINoSeqs column, which we infer to mean the total number of TICI sequences generated per sample. We will group those observations (rows) by year, and see if the total number of sequences generated is changing from year to year.
+
+
+```{r}
+samples |> mutate(year = format(CollectionDate, "%Y")) |> group_by(year) |> summarise(total = sum(TICINoSeqs))
+```
+
+We will also use another variable, "ColumeFilteredML" which sounds like it will also be a proxy of how much material has been processed over time. However, we will hit a problem with this approach - see if you can identify the issue!
+
+We will also group our observations by month this time, instead of by year:
+
+```{r}
+samples |> mutate(month = format(CollectionDate, "%m"), year = format(CollectionDate, "%Y"), day = format(CollectionDate, "%d")) |> group_by(year, month, day) |> summarise(total = sum(TICINoSeqs))
+```
