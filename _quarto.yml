@@ -1,5 +1,19 @@
 project:
+  type: website
+  output-dir: docs
+  
+website:  
   title: "intoTheTidyverse"
+  sidebar: 
+    style: docked
+    contents:
+      - text: "Introduction"
+        href: Episode1_Introduction.qmd
 
+format: 
+  html: 
+    theme: zephyr
+    #css: styles.css
+    navigation: true
+    
 editor: visual
-
