@@ -1,0 +1,82 @@
+[
+  {
+    "objectID": "Episode1_Introduction.html",
+    "href": "Episode1_Introduction.html",
+    "title": "Episode 1 - Into the tidyverse",
+    "section": "",
+    "text": "Maybe this is your first encounter with R, or maybe you’ve self-taught and stumbled your way through a plot, or maybe you’ve been using base R for ages and you figure it’s about time to check out this new ‘tidyverse’ (that’s me, by the way). Whatever your situation, this workshop is going to introduce you to the tidyverse, get you started with some exercises, and then set you loose with enough tools to explore things comfortably (and safely) on your own.",
+    "crumbs": [
+      "Episode 1 - Introduction"
+    ]
+  },
+  {
+    "objectID": "Episode1_Introduction.html#what-is-the-tidyverse",
+    "href": "Episode1_Introduction.html#what-is-the-tidyverse",
+    "title": "Episode 1 - Into the tidyverse",
+    "section": "What is the tidyverse?",
+    "text": "What is the tidyverse?\nThe tidyverse is a collection of R tools, which we call packages, that were designed to be easy to use, easy to read, and work well together. To understand the tidyverse, we need to know some of the history of R.\n\nThe R programming language\nR was created in 1993 by Ross Ihaka and Robert Gentleman at the University of Auckland. It was designed as a tool to teach statistics, and it’s been widely adopted by the field of biology. Over time many people have developed R packages - packages can be approximately thought as like apps on a phone - which focus on specific analyses. For example, if you want to identify differentially expressed genes using RNA-seq data, there is an R package that can perform various statistical tests and normalisation steps. Actually, there are lots of packages that will do this, and the hard part is choosing which one to use. All of these packages are developed by the community, which is great, and initially they were all written in what we call “base R”.\nBase R, and all the R packages that were developed using it, are a bit like the English language: for those who grew up with it, it’s beautifully flexible, expressive, and intuitive. For anyone learning it as an adult…why on earth is there a “g” in night? (Or a “k” in knight, for that matter). Base R packages, like the english language, are a mix of styles and formats depending on who wrote them.\n\n\nThe tidyverse\nThe tidyverse is a series of packages that have been designed from the ground up to work together, using a consistent, logical style. It’s written to be human readable, intuitive, and easy to learn. The tidyverse is highly popular and is well documented. My personal opinion: if I was going to learn R now, I would choose to focus on learning the tidyverse.\nThe tidyverse is also a mindset about how data should be presented and stored. Data is “tidy” if:\n\nEach variable is stored in a column (variables could be Age, Height, Occupation).\nEach observation is stored in a row (here, observations could be individuals).\n\nTogether, these rows and columns form a table.",
+    "crumbs": [
+      "Episode 1 - Introduction"
+    ]
+  },
+  {
+    "objectID": "Episode1_Introduction.html#into-the-tidyverse",
+    "href": "Episode1_Introduction.html#into-the-tidyverse",
+    "title": "Episode 1 - Into the tidyverse",
+    "section": "Into the tidyverse",
+    "text": "Into the tidyverse\nIn this workshop we will start out assuming you know nothing about R. We will assume that you are either doing this workshop using the live website, or have R and RStudio installed on your computer, or that you are using RStudio in a training environment*. If you are using the live website or training environment, you will not need to install packages, but if you are working on your own device you will need to. Installing packages might sound intimidating, but it will only require copy-pasting a line of code.\nWe will first introduce the two building blocks of R: functions and objects. Simultaneously we will look at directory structure and your RStudio environment.\nOnce you know what a function is we will look at how functions work in the tidyverse style - this is where we will introduce you to the “pipe”. The pipe, or “piping” is a way to pass information from one function to another.\nThis workshop places a strong focus on practice and repetition through exercises. You are attempting to learn a language, and you can’t do that without practice. Once you have experience with the basics, we will increase the pace and introduce you to a wider toolbox of functions that can be used to achieve your goals.\n*If you need help with installing R and RStudio, we will have a supplementary page available to assist you.",
+    "crumbs": [
+      "Episode 1 - Introduction"
+    ]
+  },
+  {
+    "objectID": "Episode2_Functions.html",
+    "href": "Episode2_Functions.html",
+    "title": "Episode 2 - Functions",
+    "section": "",
+    "text": "R has two building blocks. Objects, which we can think of as files, and Functions, which we can think of as “things that do things”. Do you want to calculate the mean of some numbers? There’s a function for that. Do you want to count the number of times a name has appeared in a list? There’s a function for that. Do you want to identify differentially expressed genes in an RNA-seq experiment? There’s a function for that too, but I will say up front that you’ll need to spend some time getting your data into the right format before that function will work.",
+    "crumbs": [
+      "Episode 2 - Functions"
+    ]
+  },
+  {
+    "objectID": "Episode2_Functions.html#format-of-a-function",
+    "href": "Episode2_Functions.html#format-of-a-function",
+    "title": "Episode 2 - Functions",
+    "section": "Format of a function",
+    "text": "Format of a function\nBecause we are working in a web-based workshop, we do not need to install or load what are called “packages” (we can mentally think of packages as being like apps, which can contain data and/or a suite of new functions). Here we will show two functions which you would need to run if you are working on your own computer. To run these functions, remove the “#” (hash symbol), and use command+return or control+enter.\n\n# install.packages(\"palmerpenguins\")\n\n# library(palmerpenguins)\n\nFunctions have a name and are always followed by a set of round brackets. Inside the round brackets is the target of the function. Here, we have used the install.packages function to download and install a package (you can think of a package as being like an app, which usually contains more functions and sometimes some example data). The package we have installed is called palmerpenguins, which is a collection of data about penguins, and before we can use it we need to load it into R, which we do with the library() function.\nStraight away you’ll see that in the first case, we put palmerpenguins in quote marks, and in the second case we didn’t use quote marks. We will cover this more later, but for now it’s enough to note that we can put a lot of different information into the round brackets.\nNow that we’ve used the library() function to load the palmerpenguin package, we can access the penguin data. The data is stored in an object called penguins, and we can’t see it but it’s in the background. We can look at it using the View() function, which will display the data in a new window. Take a second to look at the column and row names, and some of the data.",
+    "crumbs": [
+      "Episode 2 - Functions"
+    ]
+  },
+  {
+    "objectID": "Episode2_Functions.html#the-pipe",
+    "href": "Episode2_Functions.html#the-pipe",
+    "title": "Episode 2 - Functions",
+    "section": "The pipe",
+    "text": "The pipe\nBefore we go any further, let’s look at a slightly better way to use functions, which uses the “pipe”.\n\n\n\n\n\n\n\n\nIn this format we start with the data, and we pipe it to a function.\nThere are a lot of different functions we can use to view our data. Try some of these functions out for yourself, and see if you can figure out what each function is doing. It’s worth typing these manually to develop muscle memory. Functions to try:\n\nhead()\ntail()\nstr()\nsummary()\ndim()\n\nFor each function, remember to pass the penguins object to the function with the |&gt;\n\n\n\n\n\n\n\n\nWhat do you notice about the output of each of these functions? What have you learned about the penguin data so far?\n\nHelp!\nWhenever you encounter a function and you don’t know what it’s doing, you can always ask for help. Type a ? in front of the function and RStudio will open a window with the function manual. These can be dense, but the Description can be informative.\nAfter the Description there is some example code, and below that is a section called Arguments. So far, we’ve only been giving functions the one argument they require (usually, this is a target, like some data). But functions can usually accept additional arguments that modify precisely how the function works. Let’s look at the head function, which normally returns the top six rows of an object. Within the head() function, we can specify the number of rows we want to see with the “n =” argument:\n\n\n\n\n\n\n\n\nThere are two key takeaways here:\n\nWith arguments we can alter and control how a function works. This can be as small as changing the number of rows we see, or it can be as significant as changing a method! (e.g., we can specify whether adjusted p values are calculated with the FDR or Bonferroni method).\nFunctions have default arguments, and we often don’t see them! For example, the head() function uses n = 6 as a default, and unless we check, we wouldn’t know that. When you become more familiar with functions, it’s worth glancing at the function manual to get an idea of what arguments are being used as defaults.\n\n\n\nThe pipe, continued\nWriting functions using the pipe format, where data is specified first and then passed to a function, results in code that is very clear and easy to read. This is truly apparent when we start to do more complex things with our data, specifically when we incorporate more than one function.\nLet’s say I want to remove all the NAs in the bill_length_mm column, then round the values to the nearest whole number, then check that’s worked by viewing the first 6 values. With the pipe, we start with the data and read from left to right:\n\n\n\n\n\n\n\n\nEasy, right!\nWhat would this code look like without the pipe, where we put the target inside the function? In this case, we have to ‘nest’ the functions within one another, and to make sense of it we need to read from the inside out.\n\n\n\n\n\n\n\n\nReadable, when you have plenty of experience in R. You’ll probably see plenty of code like this online.",
+    "crumbs": [
+      "Episode 2 - Functions"
+    ]
+  },
+  {
+    "objectID": "Episode2_Functions.html#coordinates",
+    "href": "Episode2_Functions.html#coordinates",
+    "title": "Episode 2 - Functions",
+    "section": "Coordinates",
+    "text": "Coordinates\nOr “How we specify a subset of the data”.\nNotice in the above code the use of the “$” sign? It’s used to specify the name of a column in a 2D object (like the penguins object). Use the colnames() function (and the pipe, of course) to see the column names of the penguins object:\n\n\n\n\n\n\n\n\nWe can also type penguins and the “$” symbol and RStudio will prompt us with a dropdown menu of column names. We can narrow this down by typing the first few letters of the column name we want. In your own console, type penguins$ and use the dropdown to select a column, and pass that data to the head() function with the pipe. If the output looks like a numerical value, pass that column data to the mean() function to calculate the mean. You’ll probably need to pass the data to na.omit() first!",
+    "crumbs": [
+      "Episode 2 - Functions"
+    ]
+  },
+  {
+    "objectID": "Episode2_Functions.html#exploratory-data-analysis",
+    "href": "Episode2_Functions.html#exploratory-data-analysis",
+    "title": "Episode 2 - Functions",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\nExploratory data analysis is a broad term for familiarising yourself with your data. You’re attempting to ‘get a feel’ for the data. Is it normally distributed? Are any samples clear outliers? Is there missing data? It can take a lot of forms, and is a real skill. To start with, let’s practice visualising different groups within the data.\nTo decide where to start, let’s first use the summary() function to get an overview of the penguins object:\n\n\n\n\n\n\n\n\nFrom here I can think about what types of plots we can create. Based on this summary I could plot:\n\nCorrelation (scatter plots) for combinations of bill length, bill depth, flipper length, and body mass.\nBoxplots showing any measurement (e.g., bill depth) grouped by sex, island, species, or year.\nCombinations of these plots.\n\n\nRemoving NAs and creating objects\nI can see in the summary output that there are NAs in the dataset. These will possibly cause small issues downstream, so I’ll take the precaution of removing them all here. Note that removing NAs is a reasonably drastic step and isn’t something to do lightly when working with your own data.\n\n\n\n\n\n\n\n\nHere we have used the “&lt;-” to assign the output from na.omit() into a new object. You should see this penData object in the Environment window to the right.\n\n\nPlotting bill length with ggplot2\nMost modern R workshops include a section on the Grammer of Graphics, or the ggplot2 function. ggplot2 is a way to create visualisations within the tidyverse. It can seem overwhelming at first, but once you recognise the template that all plots are built on, it will become quick and easy to create a variety of plots with different data types with minimal extra work.\nThe format for the ggplot2 template is as follows:\n\nspecify the data\nmap variables e.g., map a column the x axis\ncreate the plot\n\n\n\n\n\n\n\n\n\nSome things to note about the format:\n\nIndentations are important. We use new lines and tabs to keep the code organised. Generally you’ll want to specify only one thing per line (e.g., data, x axis and y axis get there own lines).\nThe ggplot formula is a slight break away from the use of pipes.\nThere are actually two separate functions here: the ggplot() function, which is used to specify the data and map the variables, and the geom_boxplot() function which is used to create the actual plot. Because we want these two functions to work together, at the very end of the ggplot() function, we have added a “+” symbol. RStudio interprets this to mean “Ok, the ggplot function has finished, but I need to read it in the context of the next function”.\ngeom_boxplot() is the function for making boxplots. To make a bar plot we would use geom_bar, to make a scatter plot we use geom_point etc.,. Type geom_ in the console and scroll the dropdown menu to see the different geom types - there are plenty!\n\n\nExercise\nUse the code block below, remove the hash symbols then fill in any variable for the x and the y axis. See how the plots change. Can you create any combinations that are non-sensical, or do not work? Rather than copy-pasting, try and type out the full code each time (this will build muscle memory and make remembering the ggplot template easier).",
+    "crumbs": [
+      "Episode 2 - Functions"
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+---
+title: "Episode 3 - Transforming your Data"
+---
+
+Remember that at the start of this workshop I mentioned there is a function that can identify differentially expressed genes? I also said that in order to get that function to work, you would need to spend some time organising your data. This is the reality of modern bioinformatics - there are many functions and R packages available to us and they can do some very powerful things. A major challenge is usually getting our data into a format that is suitable for feeding into these existing functions.
+
+In this episode we will look at a few useful functions which can be used to transform our data (that is, to change the format of the data). Transformations are extremely useful and even if you don't do much else with R, the ability to quickly and easily manipulate data formats will save you time and frustration.
