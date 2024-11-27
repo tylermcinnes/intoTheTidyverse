@@ -1,86 +1,40 @@
 ---
 title: "intoTheTidyverse"
+format: live-html
 ---
 
-The tidyverse is it's own universe of code and style.
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-```{r}
-BiocManager::install("tidyverse")
-library(tidyverse)
-```
+Maybe this is your first encounter with R, or maybe you've self-taught and stumbled your way through a plot, or maybe you've been using base R for ages and you want to pick up some of the tidyverse (that's where I fit in, by the way). Whatever your situation, this workshop is going to introduce you to the tidyverse, get you started with some exercises, and then set you loose with enough tools to explore things comfortably (and safely) on your own.
 
-## The Wilder eDNA dataset is tidy
+## What is the tidyverse?
 
-A table is tidy if each variable is a separate column and each row stores separate cases. Load in the samples and records csv files with read_csv, then use the \|\> ("pipe") to pass the objects to the View() function. Pipe the samples object to the spec() function to learn what type of data is stored in each column.
+The tidyverse is a collection of R tools, which we call packages, that were designed to be easy to use, easy to read, and work well together. To understand the tidyverse, we need to know some of the history of R.
 
-```{r}
-samples <- read_csv("~/Desktop/intoTheTidyverse/samples.csv")
-samples |> View()
+### The R programming language
 
-records <- read_csv("~/Desktop/intoTheTidyverse/records.csv")
-records |> View()
+R was created in 1993 by Ross Ihaka and Robert Gentleman at the University of Auckland. It was designed as a tool to teach statistics, and it's been widely adopted by the field of biology. Over time many people have developed R packages - packages can be approximately thought as like apps on a phone - which focus on specific analyses. For example, if you want to identify differentially expressed genes using RNA-seq data, there is an R package that can perform various statistical tests and normalisation steps. Actually, there are lots of packages that will do this, and the hard part is choosing which one to use. All of these packages are developed by the community, which is great, and initially they were all written in what we call "base R".
 
-samples |> spec()
-# Shows the column specifications or types. E.g., SID is col_double() - any non-interger number, collection date is a date. 
-```
+Base R, and all the R packages that were developed using it, are a bit like the English language: for those who grew up with it, it's beautifully flexible, expressive, and intuitive. For anyone learning English as an adult...why on earth is there a "g" in night? (Or a "k" in knight, for that matter). Base R packages, like the English language, are a mix of styles and formats depending on who wrote them.
 
-### Using the Tidyverse packages to explore a dataset
+### The tidyverse
 
-Let's explore this dataset with the tidyverse. We will assume no knowledge of the data (simulating the all-too-common "we've got this dataset from a past lab member, see if you can..."). When we find ourselves with a dataset like this we might have specific questions we want to answer, and sometimes we won't yet know what those questions are. Let's start with some basic questions and work our way up in complexity.
+The tidyverse is a series of packages that have been designed from the ground up to work together, using a consistent, logical style. It's written to be human readable, intuitive, and easy to learn. The tidyverse is highly popular and is well documented. My personal opinion: if I was going to learn R now, I would choose to focus on learning the tidyverse.
 
-### How many rows and what's the total? 
+The tidyverse is also a mindset about how data should be presented and stored. Data is "tidy" if:
 
-How is data collection changing over time in terms of the amount of sequencing being done? In other words, is this company growing in popularity?
+-   Each variable is stored in a column (variables could be Age, Height, Occupation).
 
-#### *Exercise: Look at the sample and records objects, and see what data you could use to get an answer to this question.*
+-   Each observation is stored in a row (here, observations could be individuals).
 
-First, it's worth noting that there are different ways to go about this. We are just going to pick one approach to demonstrate some basic data manipulation. Since we don't have any prior knowledge about what these columns are, we are going to make some educated guesses about what they represent.
+-   Together, these rows and columns form a table.
 
-A straightforward approach would be to look at the column called CollectionDate, and count the number of samples that were collected per year. To do that, we need to re-format the data from it's current format (*e.g.,* 2022-12-12) to just the year (2022), group rows based on the year, and then count the number of rows in each group. 
+Into the tidyverse
 
-*What steps do we need to take to use this data to answer our question?*
+In this workshop we will start out assuming you know nothing about R. We will assume that you are either doing this workshop using the live website, or have R and RStudio installed on your computer, or that you are using RStudio in a training environment\*. If you are using the live website or training environment, you will not need to install packages, but if you are working on your own device you will need to. Installing packages might sound intimidating, but it will only require copy-pasting a line of code.
 
-First we need to group our rows into years and then sum the total number of sequences from each year. This involves: 
-- Re-formatting the data into year (e.g., 2022 instead of 2022-12-12) with the format function and temporarily storing it as a column called "year" with the mutate function.
+We will first introduce the two building blocks of R: functions and objects. Simultaneously we will look at visualisations and the concept of exploratory data analysis.
 
-- Grouping the new "year" column with the group_by function.
+Once you know what a function is we will look at how functions work in the tidyverse style - this is where we will introduce you to the "pipe". The pipe, or "piping" is a way to pass information from one function to another.
 
-- Count the number of rows that are in each of our groups (years) with the summarise function and the n() function. 
-
-```{r}
-samples |> mutate(year = format(CollectionDate, "%Y")) |> group_by(year) |> summarise(samples = n())
-
-# Repeat the code above, but save the output as a new object:
-yearlySamples <- samples |> mutate(year = format(CollectionDate, "%Y")) |> group_by(year) |> summarise(samples = n())
-```
-
-
-Next, let's look at how we can do more than just count the number of rows in a group - we can also, for example, sum up all the values in one of the other columns.
-
-We will continue with CollectionDate and use it alongside the TICINoSeqs column, which we infer to mean the total number of TICI sequences generated per sample. We will group those observations (rows) by year, and see if the total number of sequences generated is changing from year to year.
-
-```{r}
-samples |> mutate(year = format(CollectionDate, "%Y")) |> group_by(year) |> summarise(total = sum(TICINoSeqs))
-
-# Repeat the code above, but save the output as a new object:
-yearlyCollection <- samples |> mutate(year = format(CollectionDate, "%Y")) |> group_by(year) |> summarise(total = sum(TICINoSeqs))
-```
-
-#### Bonus exercise: There's another variable, "ColumeFilteredML" which sounds like it will also be a proxy of how much material has been processed over time. We could use this as an alternative to TICINoSeqs. However, we will hit a problem with this approach - see if you can identify the issue! Without google or the help menu, think about what you need to do to circumvent this problem. 
-
-
-### Joining two tables
-
-So far we've made two tables, yearlySamples which counts the number of samples taken per year, and yearlyCollection, which shows the number of sequences
-
-```{r}
-yearlyData <- left_join(yearlyCollection, yearlySamples)
-
-```
-
-
-
-
-## Grand Group Exercise
-
-In teams (breakout rooms or tables), assess the following code block and get ready to explain *what* it's doing and *how* it's working... 
+This workshop places a strong focus on practice and repetition through exercises. You are attempting to learn a language, and you can't do that without practice. Once you have experience with the basics, we will increase the pace and introduce you to a wider toolbox of functions that can be used to achieve your goals.
