@@ -40,4 +40,7 @@ Once you know what a function is we will look at how functions work in the tidyv
 
 This workshop places a strong focus on practice and repetition through exercises. You are attempting to learn a language, and you can't do that without practice. Once you have experience with the basics, we will increase the pace and introduce you to a wider toolbox of functions that can be used to achieve your goals.
 
+The very first thing we will do is 
+
+
 \*If you need help with installing R and RStudio, we will have a supplementary page available to assist you.
