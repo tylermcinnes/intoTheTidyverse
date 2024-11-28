@@ -1,5 +1,26 @@
 project:
-  title: "welcomeToTheTidyverse"
+  type: website
+  title: "intoTheTidyverse"
+  output-dir: docs
 
-editor: visual
+website:
+  sidebar: 
+    style: "docked"
+    search: true
+    contents:
+      - text: "Into the tidyverse"
+        href: index.qmd
+      - text: "Welcome to the tidyverse"  
+        href: intoTheTidyverse.qmd
+      - text: "Episode 1 - Functions"
+        href: episode_1_functions.qmd  
+  
 
+format:
+  html:
+    page-layout: full
+    theme: 
+        light: flatly
+        dark: darkly
+#    css: styles.css
+    toc: true

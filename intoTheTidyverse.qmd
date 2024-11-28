@@ -1,11 +1,11 @@
 ---
-title: "intoTheTidyverse"
+title: "Into the tidyverse"
 format: live-html
 ---
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Maybe this is your first encounter with R, or maybe you've self-taught and stumbled your way through a plot, or maybe you've been using base R for ages and you want to pick up some of the tidyverse (that's where I fit in, by the way). Whatever your situation, this workshop is going to introduce you to the tidyverse, get you started with some exercises, and then set you loose with enough tools to explore things comfortably (and safely) on your own.
+
 
 ## What is the tidyverse?
 
@@ -31,13 +31,12 @@ The tidyverse is also a mindset about how data should be presented and stored. D
 
 ## Into the tidyverse
 
-In this workshop series we will start out assuming you know nothing about R. We will assume that you are either doing this workshop using the live website*. We will first introduce the two building blocks of R: functions and objects. Simultaneously we will look at visualisations and the concept of exploratory data analysis.
+In this workshop series we will start out assuming you know nothing about R. We will assume that you are either doing this workshop using the live website\*. We will first introduce the two building blocks of R: functions and objects. Simultaneously we will look at visualisations and the concept of exploratory data analysis.
 
 Once you know what a function is we will look at how functions work in the tidyverse style - this is where we will introduce you to the "pipe". The pipe, or "piping" is a way to pass information from one function to another.
 
 This workshop places a strong focus on practice and repetition through exercises. You are attempting to learn a language, and you can't do that without practice. Once you have experience with the basics, we will increase the pace and introduce you to a wider toolbox of functions that can be used to achieve your goals.
 
-This workshop series draws from [R for Data Science, second edition](https://r4ds.hadley.nz/), which should be considered the primary resource for a person learning to work within the tidyverse. It is strongly recommended reading for anyone interested in R and data science. 
+This workshop series draws from [R for Data Science, second edition](https://r4ds.hadley.nz/), which should be considered the primary resource for a person learning to work within the tidyverse. It is strongly recommended reading for anyone interested in R and data science.
 
-*If you are not working on the website, you will need to do some work on your own to get R and RStudio, as well as certain R packages, installed on your computer. These installations may sound intimidating but they can be completed with some reading on google.  
-
+\*If you are not working on the website, you will need to do some work on your own to get R and RStudio, as well as certain R packages, installed on your computer. These installations may sound intimidating but they can be completed with some reading on google.

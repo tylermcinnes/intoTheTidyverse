@@ -1,12 +1,304 @@
 ---
 title: "Episode 1 - Functions"
+engine: knitr
 format: live-html
+webr:
+  packages:
+    - dplyr
+    - palmerpenguins
+    - ggplot2
 ---
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
+R has two building blocks. Objects, which we can think of as files, and Functions, which we can think of as "things that do things". Do you want to calculate the mean of some numbers? There's a function for that. Do you want to count the number of times a name has appeared in a list? There's a function for that. Do you want to identify differentially expressed genes in an RNA-seq experiment? There's a function for that too, but I will say up front that you'll need to spend some time getting your data into the right format before that function will work.
+
+
+
+## Format of a function
+
+
 ```{webr}
-fit = lm(mpg ~ am, data = mtcars)
-summary(fit)
-plot(fit)
+library(palmerpenguins)
 ```
+
+Functions have a name and are always followed by a set of round brackets. Inside the round brackets is the target of the function. Here, we have used the library() function to load a package (you can think of a package as being like an app, which usually contains *more* functions and sometimes some example data). The package we have loaded is called palmerpenguins, which is a collection of data about penguins. The data is stored as an object called penguins. We can use functions to look at the penguins object:
+```{webr}
+summary(penguins)
+```
+
+```{webr}
+head(penguins)
+```
+
+## The pipe
+
+Before we go any further, let's look at a slightly better way to use functions, which uses the "pipe".
+
+```{webr}
+penguins |> View()
+```
+
+In this format we start with the data, and we pipe it to a function.
+
+There are a lot of different functions we can use to view our data. Try some of these functions out for yourself, and see if you can figure out what each function is doing. It's worth typing these manually to develop muscle memory. Functions to try:
+
+-   head()
+
+-   tail()
+
+-   str()
+
+-   summary()
+
+-   dim()
+
+For each function, remember to pass the penguins object to the function with the \|\>
+
+```{webr}
+penguins |> head()
+```
+
+What do you notice about the output of each of these functions? What have you learned about the penguin data so far?
+
+#### Help!
+
+Whenever you encounter a function and you don't know what it's doing, you can always ask for help. If you are working in RStudio (i.e., not this workshop website), type a ? in front of the function and RStudio will open a window with the function manual. These can be dense, but the Description can be informative.
+
+After the Description there is some example code, and below that is a section called Arguments. So far, we've only been giving functions the one argument they require (usually, this is a target, like some data). But functions can usually accept additional arguments that modify precisely how the function works. Let's look at the head function, which normally returns the top six rows of an object. Within the head() function, we can specify the number of rows we want to see with the "n = " argument:
+
+```{webr}
+penguins |> head(n = 3)
+```
+
+There are two key takeaways here:
+
+1.  With arguments we can alter and control how a function works. This can be as small as changing the number of rows we see, or it can be as significant as changing a method! (*e.g.,* we can specify whether adjusted p values are calculated with the FDR or Bonferroni method).
+
+2.  Functions have default arguments, and we often don't see them! For example, the head() function uses n = 6 as a default, and unless we check, we wouldn't know that. When you become more familiar with functions, it's worth glancing at the function manual to get an idea of what arguments are being used as defaults.
+
+### The pipe, continued
+
+Writing functions using the pipe format, where data is specified first and then passed to a function, results in code that is very clear and easy to read. This is truly apparent when we start to do more complex things with our data, specifically when we incorporate more than one function.
+
+Let's say I want to remove all the NAs in the bill_length_mm column, then round the values to the nearest whole number, then check that's worked by viewing the first 6 values. With the pipe, we start with the data and read from left to right:
+
+```{webr}
+penguins$bill_length_mm |> na.omit() |> round() |> head()
+```
+
+Easy, right!
+
+What would this code look like without the pipe, where we put the target inside the function? In this case, we have to 'nest' the functions within one another, and to make sense of it we need to read from the inside out.
+
+```{webr}
+head(round(na.omit(penguins$bill_length_mm)))
+```
+
+Readable, when you have plenty of experience in R. You'll probably see plenty of code like this online.
+
+## Coordinates
+
+Or "How we specify a subset of the data".
+
+Notice in the above code the use of the "\$" sign? It's used to specify the name of a column in a 2D object (like the penguins object). Use the colnames() function (and the pipe, of course) to see the column names of the penguins object:
+
+```{webr}
+penguins |> colnames()
+```
+
+We can also type penguins and the "\$" symbol and RStudio will prompt us with a dropdown menu of column names. We can narrow this down by typing the first few letters of the column name we want. In your own console, type penguins\$ and use the dropdown to select a column, and pass that data to the head() function with the pipe. If the output looks like a numerical value, pass that column data to the mean() function to calculate the mean. You'll probably need to pass the data to na.omit() first!
+
+```{webr}
+penguins$bill_depth_mm |> na.omit() |> mean()
+```
+
+## Exploratory Data Analysis
+
+Exploratory data analysis is a broad term for familiarising yourself with your data. You're attempting to 'get a feel' for the data. Is it normally distributed? Are any samples clear outliers? Is there missing data? It can take a lot of forms, and is a real skill. To start with, let's practice visualising different groups within the data.
+
+To decide where to start, let's first use the summary() function to get an overview of the penguins object:
+
+```{webr}
+penguins |> summary()
+```
+
+From here I can think about what types of plots we can create. Based on this summary I could plot:
+
+-   Correlation (scatter plots) for combinations of bill length, bill depth, flipper length, and body mass.
+
+-   Boxplots showing any measurement (e.g., bill depth) grouped by sex, island, species, or year.
+
+-   Combinations of these plots.
+
+### Removing NAs and creating objects
+
+I can see in the summary output that there are NAs in the dataset. These will possibly cause small issues downstream, so I'll take the precaution of removing them all here. Note that removing NAs is a reasonably drastic step and isn't something to do lightly when working with your own data.
+
+```{webr}
+penData <- penguins |> na.omit()
+```
+
+Here we have used the "\<-" to assign the output from na.omit() into a new object. You should see this penData object in the Environment window to the right.
+
+### Plotting bill length with ggplot2
+
+Most modern R workshops include a section on the Grammer of Graphics, or the ggplot2 function. ggplot2 is a way to create visualisations within the tidyverse. It can seem overwhelming at first, but once you recognise the template that all plots are built on, it will become quick and easy to create a variety of plots with different data types with minimal extra work.
+
+The format for the ggplot2 template is as follows:
+
+-   specify the data
+
+-   map variables e.g., map a column the x axis
+
+-   create the plot
+
+```{webr}
+# Load the library. If you do not already have ggplot2 installed, remove the hash and run the next line:
+# biocManager::install("ggplot2")
+
+#  
+library(ggplot2)
+
+# The code to create a plot, using the template above:
+ggplot(data = penData,
+       mapping = aes(x = species,
+                     y = bill_length_mm)) +
+  geom_boxplot()
+```
+
+Some things to note about the format:
+
+-   Indentations are important. We use new lines and tabs to keep the code organised. Generally you'll want to specify only one thing per line (e.g., data, x axis and y axis get there own lines).
+
+-   The ggplot formula is a slight break away from the use of pipes.
+
+-   There are actually two separate functions here: the ggplot() function, which is used to specify the data and map the variables, and the geom_boxplot() function which is used to create the actual plot. Because we want these two functions to work together, at the very end of the ggplot() function, we have added a "+" symbol. RStudio interprets this to mean "Ok, the ggplot function has finished, but I need to read it in the context of the next function".
+
+-   geom_boxplot() is the function for making boxplots. To make a bar plot we would use geom_bar, to make a scatter plot we use geom_point etc.,. Type geom\_ in the console and scroll the dropdown menu to see the different geom types - there are plenty!
+
+#### Exercise
+
+Use the code block below, remove the hash symbols then fill in any variable for the x and the y axis. See how the plots change. Can you create any combinations that are non-sensical, or do not work? Rather than copy-pasting, try and type out the full code each time (this will build muscle memory and make remembering the ggplot template easier).
+
+```{webr}
+# ggplot(data = penData,
+#       mapping = aes(x = ,
+#                     y = )) +
+#  geom_boxplot()
+
+```
+
+### Extending ggplot2
+
+So far we have made (or broken!) a couple of basic plots. Let's extend our ggplot2 template to include some useful information like a title and a way to control the axes labels.
+
+```{webr}
+ggplot(data = penData,
+       mapping = aes(x = island,
+                     y = bill_length_mm)) +
+  geom_boxplot() +
+  labs(x = "Island",
+       y = "Bill length (mm)") +
+  ggtitle("Bill length differs by island")
+```
+
+We can also control the colour of the boxes within the plot. If we wanted to change the colour for all the boxes we could add colour = "blue" within the geom_boxplot (remember that geom_boxplot is the function that makes the actual plot, so it makes sense that we could control the colour from within that function).
+
+However, it's often more useful to make data points different colours based on another variable. To do this, we can add more to the mapping function. Remember that mapping involves taking a variable and associating it with a feature on the plot - that can be the x axis, y axis, or it can colour. Below, we will add "colour = island" within the mapping function. This will assign the island variable to colour.
+
+```{webr}
+ggplot(data = penData,
+       mapping = aes(x = island,
+                     y = bill_length_mm,
+                     colour = island)) +
+  geom_boxplot() +
+  labs(x = "Island",
+       y = "Bill length (mm)") +
+  ggtitle("Bill length differs by island")
+```
+
+Where this gets really interesting is when we map colour = species (instead of colour = island). Now we are able to plot an additional variable, treating colour as a new axis to differentiate the data:
+
+```{webr}
+ggplot(data = penData,
+       mapping = aes(x = island,
+                     y = bill_length_mm,
+                     colour = species)) +
+  geom_boxplot() +
+  labs(x = "Island",
+       y = "Bill length (mm)") +
+  ggtitle("Bill length differs by species, not island")
+```
+
+This new mapping configuration reveals that Adelie penguins are found on all three islands, while Chinstrap and Gentoo are found only on Dream and Biscoe islands respectively. What initially looked like island-specific differences in bill length were actually *species*-specific differences! 
+
+This type of discovery is the core concern of exploratory analysis. This information was not easily available to us while the data was in a spreadsheet or table form, but it is *immediately* apparent when visualised.
+
+### Other geoms
+
+Let's look at another common type of plot: the scatter plot. To create the scatter plot we need to select two continuous variables (e.g., do not use categorical variables such as sex, island, or species). We will replace geom_boxplot with the new geom_point() function, and in the arguments for this function we will add size (the size of the data point) and alpha (how opaque/transparent the point is).
+
+```{webr}
+ggplot(data = penData,
+       mapping = aes(x = flipper_length_mm,
+                     y = body_mass_g,
+                     colour = sex)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(x = "Flipper length (mm)",
+       y = "Body mass (g)") +
+  ggtitle("Flipper length vs body mass")
+```
+
+What do you notice when looking at this plot? 
+(Other than how pleasantly aesthetic the default colours are in ggplot2).
+
+Perhaps, like me, you have a vague sense that there are two different groups here. This could be because of the distribution of the data points - it looks like there is a cluster of less-well correlated points in the bottom left, and a second, more tightly correlated group in the top right.
+
+One clue comes from colouring the points by sex - we see a repeating pattern from bottom left to top right, which starts with a cluster of females, then a cluster of males, then another cluster of females, and another cluster of males. In many bird species the male is on average heavier than the female (although, the opposite is true in many raptor species), so it is strange to see a sub-cluster of females that are heavier than a sub-cluster of males.
+
+#### Exercise
+
+Recreate the plot above, but this time, change colour = sex to colour = species. Add in a new mapping argument shape = sex so that we can view both sex and species at the same time.
+
+```{webr}
+ggplot(data = penData,
+       mapping = aes(x = flipper_length_mm,
+                     y = body_mass_g,
+                     colour = species,
+                     shape = sex)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(x = "Flipper length (mm)",
+       y = "Body mass (g)") +
+  ggtitle("Flipper length vs body mass")
+```
+
+We had the advantage of knowing that species contributes to differences in bill length, thanks to our earlier plot, so we probably would have known to colour our samples by species, but in the future we might not be aware of sub-structures within our data. Learning to spot trends (like a group being heterogenous) is an important skill to train.
+
+#### Exercise
+
+Clear your digital workspace so that you cannot see the code used to create the previous plots. Now, run penData \|\> summary() to see the data you are working with. Working only from memory, make a new scatter plot that maps bill_depth_mm to the x axis and flipper_length_mm to the y axis.
+
+If you are unable to perfectly recreate the code from memory - that's very normal! Get as far as you can and attempt to run the code. If it works, that's great. If it doesn't work (you get red warning or error messages, or a "+") hit the esc button, then go back to your previous code and correct your mistakes until it works.
+
+Finally, note down some general conclusions about the data based on your new visualisation.
+
+```{webr}
+library(viridis)
+
+ggplot(data = penData,
+       mapping = aes(x = bill_length_mm,
+                     y = flipper_length_mm,
+                     colour = species,
+                     shape = sex)) +
+  geom_point(size = 2, alpha = 0.6) +
+  scale_colour_viridis(discrete = TRUE) +
+  labs(x = "Bill depth (mm)",
+       y = "Flipper length (mm)") +
+  ggtitle("Bill depth vs flipper length") 
+```
+
+
+You now have a basic grasp of functions, and appreciate the value of visualising your data. 
+
+

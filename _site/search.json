@@ -1,0 +1,82 @@
+[
+  {
+    "objectID": "intoTheTidyverse.html",
+    "href": "intoTheTidyverse.html",
+    "title": "Into the tidyverse",
+    "section": "",
+    "text": "The tidyverse is a collection of R tools, which we call packages, that were designed to be easy to use, easy to read, and work well together. To understand the tidyverse, we need to know some of the history of R.\n\n\nR was created in 1993 by Ross Ihaka and Robert Gentleman at the University of Auckland. It was designed as a tool to teach statistics, and it’s been widely adopted by the field of biology. Over time many people have developed R packages - packages can be approximately thought as like apps on a phone - which focus on specific analyses. For example, if you want to identify differentially expressed genes using RNA-seq data, there is an R package that can perform various statistical tests and normalisation steps. Actually, there are lots of packages that will do this, and the hard part is choosing which one to use. All of these packages are developed by the community, which is great, and initially they were all written in what we call “base R”.\nBase R, and all the R packages that were developed using it, are a bit like the English language: for those who grew up with it, it’s beautifully flexible, expressive, and intuitive. For anyone learning English as an adult…why on earth is there a “g” in night? (Or a “k” in knight, for that matter). Base R packages, like the English language, are a mix of styles and formats depending on who wrote them.\n\n\n\nThe tidyverse is a series of packages that have been designed from the ground up to work together, using a consistent, logical style. It’s written to be human readable, intuitive, and easy to learn. The tidyverse is highly popular and is well documented. My personal opinion: if I was going to learn R now, I would choose to focus on learning the tidyverse.\nThe tidyverse is also a mindset about how data should be presented and stored. Data is “tidy” if:\n\nEach variable is stored in a column (variables could be Age, Height, Occupation).\nEach observation is stored in a row (here, observations could be individuals).\nTogether, these rows and columns form a table.",
+    "crumbs": [
+      "Welcome to the tidyverse"
+    ]
+  },
+  {
+    "objectID": "intoTheTidyverse.html#what-is-the-tidyverse",
+    "href": "intoTheTidyverse.html#what-is-the-tidyverse",
+    "title": "Into the tidyverse",
+    "section": "",
+    "text": "The tidyverse is a collection of R tools, which we call packages, that were designed to be easy to use, easy to read, and work well together. To understand the tidyverse, we need to know some of the history of R.\n\n\nR was created in 1993 by Ross Ihaka and Robert Gentleman at the University of Auckland. It was designed as a tool to teach statistics, and it’s been widely adopted by the field of biology. Over time many people have developed R packages - packages can be approximately thought as like apps on a phone - which focus on specific analyses. For example, if you want to identify differentially expressed genes using RNA-seq data, there is an R package that can perform various statistical tests and normalisation steps. Actually, there are lots of packages that will do this, and the hard part is choosing which one to use. All of these packages are developed by the community, which is great, and initially they were all written in what we call “base R”.\nBase R, and all the R packages that were developed using it, are a bit like the English language: for those who grew up with it, it’s beautifully flexible, expressive, and intuitive. For anyone learning English as an adult…why on earth is there a “g” in night? (Or a “k” in knight, for that matter). Base R packages, like the English language, are a mix of styles and formats depending on who wrote them.\n\n\n\nThe tidyverse is a series of packages that have been designed from the ground up to work together, using a consistent, logical style. It’s written to be human readable, intuitive, and easy to learn. The tidyverse is highly popular and is well documented. My personal opinion: if I was going to learn R now, I would choose to focus on learning the tidyverse.\nThe tidyverse is also a mindset about how data should be presented and stored. Data is “tidy” if:\n\nEach variable is stored in a column (variables could be Age, Height, Occupation).\nEach observation is stored in a row (here, observations could be individuals).\nTogether, these rows and columns form a table.",
+    "crumbs": [
+      "Welcome to the tidyverse"
+    ]
+  },
+  {
+    "objectID": "intoTheTidyverse.html#into-the-tidyverse",
+    "href": "intoTheTidyverse.html#into-the-tidyverse",
+    "title": "Into the tidyverse",
+    "section": "Into the tidyverse",
+    "text": "Into the tidyverse\nIn this workshop series we will start out assuming you know nothing about R. We will assume that you are either doing this workshop using the live website*. We will first introduce the two building blocks of R: functions and objects. Simultaneously we will look at visualisations and the concept of exploratory data analysis.\nOnce you know what a function is we will look at how functions work in the tidyverse style - this is where we will introduce you to the “pipe”. The pipe, or “piping” is a way to pass information from one function to another.\nThis workshop places a strong focus on practice and repetition through exercises. You are attempting to learn a language, and you can’t do that without practice. Once you have experience with the basics, we will increase the pace and introduce you to a wider toolbox of functions that can be used to achieve your goals.\nThis workshop series draws from R for Data Science, second edition, which should be considered the primary resource for a person learning to work within the tidyverse. It is strongly recommended reading for anyone interested in R and data science.\n*If you are not working on the website, you will need to do some work on your own to get R and RStudio, as well as certain R packages, installed on your computer. These installations may sound intimidating but they can be completed with some reading on google.",
+    "crumbs": [
+      "Welcome to the tidyverse"
+    ]
+  },
+  {
+    "objectID": "episode_1_functions.html",
+    "href": "episode_1_functions.html",
+    "title": "Episode 1 - Functions",
+    "section": "",
+    "text": "R has two building blocks. Objects, which we can think of as files, and Functions, which we can think of as “things that do things”. Do you want to calculate the mean of some numbers? There’s a function for that. Do you want to count the number of times a name has appeared in a list? There’s a function for that. Do you want to identify differentially expressed genes in an RNA-seq experiment? There’s a function for that too, but I will say up front that you’ll need to spend some time getting your data into the right format before that function will work.",
+    "crumbs": [
+      "Episode 1 - Functions"
+    ]
+  },
+  {
+    "objectID": "episode_1_functions.html#format-of-a-function",
+    "href": "episode_1_functions.html#format-of-a-function",
+    "title": "Episode 1 - Functions",
+    "section": "Format of a function",
+    "text": "Format of a function",
+    "crumbs": [
+      "Episode 1 - Functions"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Into the tidyverse",
+    "section": "",
+    "text": "Maybe this is your first encounter with R, or maybe you’ve self-taught and stumbled your way through a plot, or maybe you’ve been using base R for ages and you want to pick up some of the tidyverse (that’s where I fit in, by the way). Whatever your situation, this workshop is going to introduce you to the tidyverse, get you started with some exercises, and then set you loose with enough tools to explore things comfortably (and safely) on your own.",
+    "crumbs": [
+      "Into the tidyverse"
+    ]
+  },
+  {
+    "objectID": "index.html#what-is-the-tidyverse",
+    "href": "index.html#what-is-the-tidyverse",
+    "title": "Into the tidyverse",
+    "section": "What is the tidyverse?",
+    "text": "What is the tidyverse?\nThe tidyverse is a collection of R tools, which we call packages, that were designed to be easy to use, easy to read, and work well together. To understand the tidyverse, we need to know some of the history of R.\n\nThe R programming language\nR was created in 1993 by Ross Ihaka and Robert Gentleman at the University of Auckland. It was designed as a tool to teach statistics, and it’s been widely adopted by the field of biology. Over time many people have developed R packages - packages can be approximately thought as like apps on a phone - which focus on specific analyses. For example, if you want to identify differentially expressed genes using RNA-seq data, there is an R package that can perform various statistical tests and normalisation steps. Actually, there are lots of packages that will do this, and the hard part is choosing which one to use. All of these packages are developed by the community, which is great, and initially they were all written in what we call “base R”.\nBase R, and all the R packages that were developed using it, are a bit like the English language: for those who grew up with it, it’s beautifully flexible, expressive, and intuitive. For anyone learning English as an adult…why on earth is there a “g” in night? (Or a “k” in knight, for that matter). Base R packages, like the English language, are a mix of styles and formats depending on who wrote them.\n\n\nThe tidyverse\nThe tidyverse is a series of packages that have been designed from the ground up to work together, using a consistent, logical style. It’s written to be human readable, intuitive, and easy to learn. The tidyverse is highly popular and is well documented. My personal opinion: if I was going to learn R now, I would choose to focus on learning the tidyverse.\nThe tidyverse is also a mindset about how data should be presented and stored. Data is “tidy” if:\n\nEach variable is stored in a column (variables could be Age, Height, Occupation).\nEach observation is stored in a row (here, observations could be individuals).\nTogether, these rows and columns form a table.",
+    "crumbs": [
+      "Into the tidyverse"
+    ]
+  },
+  {
+    "objectID": "index.html#into-the-tidyverse",
+    "href": "index.html#into-the-tidyverse",
+    "title": "Into the tidyverse",
+    "section": "Into the tidyverse",
+    "text": "Into the tidyverse\nIn this workshop series we will start out assuming you know nothing about R. We will assume that you are either doing this workshop using the live website*. We will first introduce the two building blocks of R: functions and objects. Simultaneously we will look at visualisations and the concept of exploratory data analysis.\nOnce you know what a function is we will look at how functions work in the tidyverse style - this is where we will introduce you to the “pipe”. The pipe, or “piping” is a way to pass information from one function to another.\nThis workshop places a strong focus on practice and repetition through exercises. You are attempting to learn a language, and you can’t do that without practice. Once you have experience with the basics, we will increase the pace and introduce you to a wider toolbox of functions that can be used to achieve your goals.\nThis workshop series draws from R for Data Science, second edition, which should be considered the primary resource for a person learning to work within the tidyverse. It is strongly recommended reading for anyone interested in R and data science.\n*If you are not working on the website, you will need to do some work on your own to get R and RStudio, as well as certain R packages, installed on your computer. These installations may sound intimidating but they can be completed with some reading on google.",
+    "crumbs": [
+      "Into the tidyverse"
+    ]
+  }
+]
