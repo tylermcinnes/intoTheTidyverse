@@ -1,4 +1,180 @@
 ---
 title: "Episode 2 Transforming your data"
-format: html
+engine: knitr
+format: live-html
+webr:
+  packages:
+    - dplyr
+    - Lahman
 ---
+
+In this episode we will see how a small number of functions can be used to *transform* your data. What do we mean by *transform*? When we receive raw data we often need to perform some basic tidying, sorting, or trimming to get it into a format that is clean and easy for us to work with. 
+
+Transforming data can involve:
+
+- Ordering rows or columns (e.g., to rank p.values or to sort samples alphabetically).
+
+- Removing rows or columns, either based on Boolean operators (e.g., keep values > x, or < y) or to remove duplicates. 
+
+- Rename variables (e.g., from "W" to "Win").
+
+- Create new columns based on other columns (e.g., success = wins / losses).
+
+We can do all of these transformations using a small number of functions from the dplyr package. The dplyr functions are sometimes referred to as 'verbs', since they have descriptive names that identify what the function does.
+
+## The dplyr verbs
+
+To prevent the feeling of being overwhelmed by new functions, let's start by listing the functions. To work with rows we only have three: **arrange()**, **filter()**, **distinct()**. To work with columns, we have four: **relocate()**, **select()**, **rename()**, **mutate()**. 
+
+Of these seven new functions, six of them have names that are probably easy to interpret: arrange() and relocate() change the order of rows and columns, filter() and select() keep only certain rows and columns, rename() changes the name of columns. Only mutate() is not immediately obvious: mutate creates a new column based on one or more other columns (we can think of the data being mutated into a new form). 
+
+For each of these seven functions we will look at the basic syntax, how the arguments can be used, and complete some exercises. 
+
+First, let's take a quick look at the dataset we are using for this episode: The Lahman package has a collection of baseball datasets, including batting, pitching and fielding records. We will focus on the pitching records.  
+```{webr}
+bbPitching <- Lahman::Pitching
+
+bbPitching |> head()
+```
+
+This is reasonably representative of a dataset, in that it's got a lot of column names that don't immediately mean anything to us. If we wanted to, we could find more details online which will explain everything in the (Lahman package)[https://cran.r-project.org/web/packages/Lahman/Lahman.pdf]. Terms will be explained as we get to them, so don't feel any pressure to understand what the column names all mean just yet. 
+
+
+## (Re)arranging the order
+
+The **arrange()** function (for rows) and the **relocate()** function (for columns) allows us to re-order our data. 
+
+
+### arrange()
+Arrange can take one or more column names as an argument, and then arranges the row order based on the value in that column. 
+
+```{webr}
+bbPitching |> arrange(yearID)
+```
+
+This has arranged our data by yearID, starting with the earliest year first, showing us the records date back to 1871!
+
+We can add a second column, in which case arrange() will *break ties* based on the data in the second column.
+```{webr}
+bbPitching |> arrange(yearID, W)
+```
+
+Here we have arranged by year, and then *within* year, players are ranked according to their number of wins (W). However, arrange() ranks from smallest to largest (ascending order) as a defaul, and I'd like to see the highest number of wins at the top of each year. I can do this with the **desc()** function:
+```{webr}
+bbPitching |> arrange(yearID, desc(W))
+```
+Now, yearID is arranged from smallest to largest (ascending) and W is arranged from highest to lowest (descending). 
+
+#### Exercise
+
+What uses can you think of for the arrange() function? Have you had to do something like this before? Did you encounter issues, and does the arrange() function have the same limitations? 
+
+
+### relocate()
+
+If you want to change the order of columns, the relocate() function takes a column name and moves it to another position in the dataset. By default, relocate will place the specified column at the start (left) of the dataset, but we can choose to place it immediately before, or immediately after, another column.
+
+Let's move the teamID to the far left (which we will call the start or front of the dataset). 
+```{webr}
+bbPitching |> relocate(teamID) |> head()
+```
+
+We can also move multiple columns at once:
+```{webr}
+bbPitching |> relocate(W,L,G) |> head()
+```
+
+Note: because W, L, G are all next to one another, we could actually have written it as relocate(W:G). Also, columns don't need to already be next to each other to be moved as a group. relocate(W, L, EBB, R) would move these four columns from their various places to the left most positions (with W ending up on the far left, R being fourth in). 
+
+
+#### Exercise
+
+Notice anything odd about the output of this function? If this has worked correctly, the columns should read: W, L, G, playerID. But, in the code above, we relocated yearID to the left of playerID. Why has it gone back???
+
+This raises a crucial point about the dplyr verbs: they **do not modify the original data**. All the functions we have run so far are only ever taking the data, making the changes, and printing the result to the screen. The original data is never modified. If we want to save a copy of the data in the new format, we need to save that information into an object. We can do that here:
+```{webr}
+wlgPitching <- bbPitching |> relocate(W,L,G) |> head()
+
+wlgPitching |> head(n = 4)
+```
+
+### relocate() cont
+
+The relocate() function is more flexible when we start to use the **.before** and **.after** arguments. As before, we need to specify the name of the column we want to move, and will then use either .before or .after and state another column name. 
+```{webr}
+bbPitching |> relocate(ERA, .after = playerID) |> head()
+```
+
+Use the relocate() function to get the column names in this order: 
+
+The first six columns must be in this order: playerID, W, L, G, yearID, teamID, with stint and lgID *as the last two columns* The other columns can go in any order.
+
+```{webr}
+#| exercise: ex2_1
+______ |> ______
+```
+
+::: { .hint exercise="ex2_1"}
+::: { .callout-note collapse="false"}
+## Hint 1
+
+There are two ways (at least) to achieve this outcome. 
+
+First, we can move W, L, and G to immediately after playerID, save the output into an intermediate object, and then move stint and lgID to after GIDP. 
+
+:::
+:::
+  
+  
+  
+::: { .hint exercise="ex2_1"}
+::: { .callout-note collapse="false"}
+## Hint 2
+
+That would look something like this: 
+
+intermediateObject <- bbPitching |> relocate(W, L, G, .after = playerID)
+
+intermediateObject |> relocate(stint, lgID, .after = GIDP)
+
+:::
+:::
+
+
+::: { .hint exercise="ex2_1"}
+::: { .callout-note collapse="false"}
+## Hint 3
+
+Another version of this option is to skip the intermediate object and simply pipe the output from the first function into a second instance of the relocate function, like this:
+
+bbPitching |> relocate(W, L, G, .after = playerID) |>  relocate(stint, lgID, .after = GIDP)
+
+Chaining functions with multiple uses of the pipe is very powerful!
+
+:::
+:::
+
+
+#### Conclusions on ordering
+
+A useful way to remember which function is for rows and which is for columns: the "r"s in arrange are for rows, and the "c" in relocate is for columns. arrange() is functionally a sorting function, while relocate() is more of a manual re-shuffling of the columns. 
+
+Remember that these functions are not changing the original data - and that's most probably a very good thing! If you do want to keep the changes you are making, consider saving the transformed data into a new object rather than over-writing the original.
+
+
+
+## Keeping or removing data
+
+The next two functions we will look at are filter() (for rows) and select() (for columns). In both cases, we will specify which rows or columns we want to keep, and the rest will be discarded. 
+
+### filter()
+
+filter() can be used to keep any rows that meet a certain criteria in a given column. We can keep rows with values which are greater than, less than, or equal to a value, and we can use terms like "*and*" or "*or*" (e.g., keep any row if the value is greater than 1 *or* less than -1)
+
+```{webr}
+bbData |> filter(BAOpp < 0.2)
+```
+
+
+Conclude with the 'things they have in commmon' information
+
