@@ -63,11 +63,11 @@ Here we have arranged by year, and then *within* year, players are ranked accord
 ```{webr}
 bbPitching |> arrange(yearID, desc(W)) |> head()
 ```
-Now, yearID is arranged from smallest to largest (ascending) and W is arranged from highest to lowest (descending). 
+Now, yearID is arranged from smallest to largest (ascending) and W is arranged from highest to lowest (descending). This provides us with an important example: Within a function, we can add additional arguments to control how that function works.
 
 #### Exercise
 
-What uses can you think of for the arrange() function? Have you had to do something like this before? Did you encounter issues, and does the arrange() function have the same limitations? 
+What uses can you think of the arrange() function? Have you had to do something like this before? Did you encounter issues, and does the arrange() function have the same limitations? 
 
 
 ### relocate()
@@ -89,7 +89,7 @@ Note: because W, L, G are all next to one another, we could actually have writte
 
 Notice anything odd about the output of this function? If this has worked correctly, the columns should read: W, L, G, playerID. But, in the code above, we relocated yearID to the left of playerID. Why has it gone back???
 
-This raises a crucial point about the dplyr verbs: they **do not modify the original data**. All the functions we have run so far are only ever taking the data, making the changes, and printing the result to the screen. The original data is never modified. If we want to save a copy of the data in the new format, we need to save that information into an object. We can do that here:
+This raises a crucial point about the dplyr verbs: they **do not modify the original data**. All the functions we have run so far are only ever taking the data, making the changes, and printing the result to the screen. The original data is never modified. If we want to save a copy of the data in the new format, we need to save that information into an object. In the space below, use the relocate() function to save a new object with the W, L and G columns at the far left. 
 ```{webr}
 #| exercise: ex2_1
 wlgPitching <- bbPitching |> ______ |> head()
@@ -173,37 +173,40 @@ Remember that these functions are not changing the original data - and that's mo
 
 ## Keeping or removing data
 
-The next two functions we will look at are filter() (for rows) and select() (for columns). In both cases, we will specify which rows or columns we want to keep, and the rest will be discarded. As with the above two functions, we can use the r in filte*r* to remind us of "rows" and the c in sele*c*t to remind us of "columns".
+The next two functions we will look at are filter() (for rows) and select() (for columns). In both cases, we will specify which rows or columns we want to keep, and the rest will be discarded. As with the above two functions, we can use the *r* in filte*r* to remind us of "*r*ows" and the *c* in sele*c*t to remind us of "*c*olumns".
 
 ### filter()
 
 filter() can be used to keep any rows that meet a certain criteria in a given column. We can keep rows with values which are greater than, less than, or equal to a value, and we can use terms like "*and*" or "*or*" (e.g., keep any row if the value is greater than 1 *or* less than -1). 
 
-We will pipe the dat to the filter function, specify a column name to work from, and then set the threshold for inclusion.
+We will pipe the data to the filter function, specify a column name to work from, and then set the threshold for inclusion.
 
 ```{webr}
-bbPitching |> filter(yearID > 2000) |> head()
+bbPitching |> filter(yearID > 2000) |> summary()
 ```
 
 Note that we have not changed the order of the rows, or anything else about the data, but only rows collected *after* the year 2000 are included. If we wanted to include the year 2000, we could use:
 
 ```{webr}
-bbPitching |> filter(yearID >= 2000) |> head()
+bbPitching |> filter(yearID >= 2000) |> summary()
 ```
 
 #### And / Or
-We can also **combine** operators, in either an "and" setting or an "or" setting. 
+We can also **combine** operators in either the "and" setting or the "or" setting. 
 
-Modify the code below to filter for player information from the year 2000 until now **and** for those who played for the BOS (Boston) team.
+Modify the code below to filter for player information from the year ("yearID" column) 2000 until now **and** for those who played for the BOS (Boston) team (using the "teamID" column).
 
-Note 1: when we want to specify equals (as in, teamID is equal to BOS), we must use "==" over "=". 
+Note 1: when we want to specify equals (as in, teamID is equal to BOS), we must use "==" over "=".
 
-Note 2: here we are using "&", but in some cases "," can be used to mean and.
+Note 2: when using == we must put "BOS" in quotation marks.
+
+Note 3: here we are using "&", but in some cases "," can be used to mean and.
 
 ```{webr}
 #| exercise: ex2_3
 bbPitching |> filter(______ ______ ______ & teamID == ______) |> head()
 ```
+
 
 ::: { .hint exercise="ex2_3"}
 ::: { .callout-note collapse="false"}
@@ -225,7 +228,7 @@ Note that because BOS is a character, it needs to be in "" marks.
 :::
 
 ::: { .solution exercise="ex2_3" }
-::: { .callout-tip collapse="false"}
+::: { .callout-note collapse="false"}
 
 bbPitching |> filter(yearID >= 2000 & teamID == "BOS")
 
@@ -255,7 +258,7 @@ bbPitching |> _______ |> head()
 ```
 
 ::: { .hint exercise="ex2_4"}
-::: { .callout collapse="false"}
+::: { .callout-note collapse="false"}
 
 Because we are keeping two columns we will need to use some form of "and". You might want to try "&", but for select() we need to use "," to separate the columns we want. 
 
@@ -263,7 +266,7 @@ Because we are keeping two columns we will need to use some form of "and". You m
 :::
 
 ::: { .solution exercise="ex2_4"}
-::: { .callout collapse="false"}
+::: { .callout-note collapse="false"}
 
 bbPitching |> select(playerID, teamID) |> head()
 :::
@@ -307,7 +310,7 @@ bbPitching |> ______ |> head()
 ```
 
 ::: { .hint exercise="ex2_5}
-::: { .callout collapse="false"}
+::: { .callout-note collapse="false"}
 
 We need to use the "or" key: |
 
@@ -321,7 +324,7 @@ But this will fail. Instead of providing the "|" to the contains() function, ins
 :::
 
 ::: { .solution exercise="ex2_5"}
-::: { .callout collapse="false"}
+::: { .callout-note collapse="false"}
 
 
 bbPitching |> select(contains("R") | contains("r")) |> head()
