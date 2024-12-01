@@ -14,6 +14,8 @@ website:
         href: intoTheTidyverse.qmd
       - text: "Episode 1 - Functions"
         href: episode_1_functions.qmd  
+      - text: "Episode 2 - Data Transformations"
+        href: episode_2_dataTransformations.qmd
   
 
 format:
