@@ -59,7 +59,7 @@ We can add a second column, in which case arrange() will *break ties* based on t
 bbPitching |> arrange(yearID, W)
 ```
 
-Here we have arranged by year, and then *within* year, players are ranked according to their number of wins (W). However, arrange() ranks from smallest to largest (ascending order) as a defaul, and I'd like to see the highest number of wins at the top of each year. I can do this with the **desc()** function:
+Here we have arranged by year, and then *within* year, players are ranked according to their number of wins (W). However, arrange() ranks from smallest to largest (ascending order) as a default, and I'd like to see the highest number of wins at the top of each year. I can do this with the **desc()** function:
 ```{webr}
 bbPitching |> arrange(yearID, desc(W))
 ```
@@ -87,16 +87,24 @@ bbPitching |> relocate(W,L,G) |> head()
 Note: because W, L, G are all next to one another, we could actually have written it as relocate(W:G). Also, columns don't need to already be next to each other to be moved as a group. relocate(W, L, EBB, R) would move these four columns from their various places to the left most positions (with W ending up on the far left, R being fourth in). 
 
 
-#### Exercise
-
 Notice anything odd about the output of this function? If this has worked correctly, the columns should read: W, L, G, playerID. But, in the code above, we relocated yearID to the left of playerID. Why has it gone back???
 
 This raises a crucial point about the dplyr verbs: they **do not modify the original data**. All the functions we have run so far are only ever taking the data, making the changes, and printing the result to the screen. The original data is never modified. If we want to save a copy of the data in the new format, we need to save that information into an object. We can do that here:
 ```{webr}
-wlgPitching <- bbPitching |> relocate(W,L,G) |> head()
+#| exercise: ex2_1
+wlgPitching <- bbPitching |> ______ |> head()
 
 wlgPitching |> head(n = 4)
 ```
+
+::: { .hint exercise="ex2_1"}
+::: { .callout-note collapse="false"}
+
+wlgPitching <- bbPitching |> relocate(W,L,G) |> head()
+
+:::
+:::
+
 
 ### relocate() cont
 
@@ -110,11 +118,11 @@ Use the relocate() function to get the column names in this order:
 The first six columns must be in this order: playerID, W, L, G, yearID, teamID, with stint and lgID *as the last two columns* The other columns can go in any order.
 
 ```{webr}
-#| exercise: ex2_1
+#| exercise: ex2_2
 ______ |> ______
 ```
 
-::: { .hint exercise="ex2_1"}
+::: { .hint exercise="ex2_2"}
 ::: { .callout-note collapse="false"}
 ## Hint 1
 
@@ -127,7 +135,7 @@ First, we can move W, L, and G to immediately after playerID, save the output in
   
   
   
-::: { .hint exercise="ex2_1"}
+::: { .hint exercise="ex2_2"}
 ::: { .callout-note collapse="false"}
 ## Hint 2
 
@@ -141,7 +149,7 @@ intermediateObject |> relocate(stint, lgID, .after = GIDP)
 :::
 
 
-::: { .hint exercise="ex2_1"}
+::: { .hint exercise="ex2_2"}
 ::: { .callout-note collapse="false"}
 ## Hint 3
 
@@ -165,16 +173,164 @@ Remember that these functions are not changing the original data - and that's mo
 
 ## Keeping or removing data
 
-The next two functions we will look at are filter() (for rows) and select() (for columns). In both cases, we will specify which rows or columns we want to keep, and the rest will be discarded. 
+The next two functions we will look at are filter() (for rows) and select() (for columns). In both cases, we will specify which rows or columns we want to keep, and the rest will be discarded. As with the above two functions, we can use the r in filte*r* to remind us of "rows" and the c in sele*c*t to remind us of "columns".
 
 ### filter()
 
-filter() can be used to keep any rows that meet a certain criteria in a given column. We can keep rows with values which are greater than, less than, or equal to a value, and we can use terms like "*and*" or "*or*" (e.g., keep any row if the value is greater than 1 *or* less than -1)
+filter() can be used to keep any rows that meet a certain criteria in a given column. We can keep rows with values which are greater than, less than, or equal to a value, and we can use terms like "*and*" or "*or*" (e.g., keep any row if the value is greater than 1 *or* less than -1). 
+
+We will pipe the dat to the filter function, specify a column name to work from, and then set the threshold for inclusion.
 
 ```{webr}
-bbData |> filter(BAOpp < 0.2)
+bbPitching |> filter(yearID > 2000)
 ```
 
+Note that we have not changed the order of the rows, or anything else about the data, but only rows collected *after* the year 2000 are included. If we wanted to include the year 2000, we could use:
 
-Conclude with the 'things they have in commmon' information
+```{webr}
+bbPitching |> filter(yearID >= 2000)
+```
+
+#### And / Or
+We can also **combine** operators, in either an "and" setting or an "or" setting. 
+
+Modify the code below to filter for player information from the year 2000 until now **and** for those who played for the BOS (Boston) team.
+
+Note 1: when we want to specify equals (as in, teamID is equal to BOS), we must use "==" over "=". 
+
+Note 2: here we are using "&", but in some cases "," can be used to mean and.
+
+```{webr}
+#| exercise: ex2_3
+bbPitching |> filter(______ ______ ______ & teamID == ______)
+```
+
+::: { .hint exercise="ex2_3"}
+::: { .callout-note collapse="false"}
+## Hint 1
+
+There are four replacements to make: 
+
+- Specify the column: year
+
+- The operator "greater than or equal to": >=
+
+- The year: 2000
+
+- The teamID: BOS
+
+Note that because BOS is a character, it needs to be in "" marks. 
+
+:::
+:::
+
+::: { .solution exercise="ex2_3" }
+::: { .callout-tip collapse="false"}
+
+bbPitching |> filter(yearID >= 2000 & teamID == "BOS")
+
+:::
+:::
+
+
+We can also use "or" with two operators, with the | symbol.
+
+```{webr}
+bbPitching |> filter(teamID == "BOS" | teamID == "SFN") |> summary()
+```
+
+This will return all rows where the teamID is "BOS" or is "SFN". 
+
+### select()
+
+The select() function works similarly to filter(), except it defines which columns are kept. 
+
+#### Exercise
+
+Having worked with arrange(), relocate(), and filter(), see if you work out how select() works. Keep the playerID and teamID, and pipe this to the head() function for display:
+
+```{webr}
+#| exercise: ex2_4
+bbPitching |> _______ |> head()
+```
+
+::: { .hint exercise="ex2_4"}
+::: { .callout collapse="false"}
+
+Because we are keeping two columns we will need to use some form of "and". You might want to try "&", but for select() we need to use "," to separate the columns we want. 
+
+:::
+:::
+
+::: { .solution exercise="ex2_4"}
+::: { .callout collapse="false"}
+
+bbPitching |> select(playerID, teamID) |> head()
+:::
+:::
+
+
+The select() function has some alternative syntax that can be useful in certain situations (this is an excellent time to remind you that you **don't** need to memorise everything).
+
+```{webr}
+# Using the ":" will select every column between the two listed columns (inclusive)
+bbPitching |> select(playerID:teamID) |> head()
+```
+
+```{webr}
+# Alternatively, the "!" means "Not this!" and can be used on a single column or combined with the ":".
+bbPitching |> select(!yearID:stint) |> head()
+```
+
+### select() advanced usage
+
+We can also use select() to introduce you to a powerful feature of programming languages: the ability to perform pattern matching. We will cover pattern matching another time, but for now we can think of it as not needing to specify the exact name of every single column we want to keep. 
+
+```{webr}
+bbPitching |> select(starts_with("S")) |> head()
+```
+
+```{webr}
+bbPitching |> select(ends_with("D")) |> head()
+```
+
+```{webr}
+bbPitching |> select(contains("R")) |> head()
+```
+
+#### Exercise
+
+What if you wanted to select all columns that contained either "R" or "r"?
+```{webr}
+#| exercise: ex2_5
+bbPitching |> ______ |> head()
+```
+
+::: { .hint exercise="ex2_5}
+::: { .callout collapse="false"}
+
+We need to use the "or" key: |
+
+You might try 
+
+bbPitching |> select(contains("R" | "r")) |> head()
+
+But this will fail. Instead of providing the "|" to the contains() function, instead try providing it to the select() function.
+
+:::
+:::
+
+::: { .solution exercise="ex2_5"}
+::: { .callout collapse="false"}
+
+
+bbPitching |> select(contains("R") | contains("r")) |> head()
+
+In this format, the select() function will return any column that "contains R" **or** "contains r". 
+
+:::
+:::
+
+
+Conclude with the 'things they have in common' information
 
