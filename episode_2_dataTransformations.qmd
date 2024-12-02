@@ -8,6 +8,8 @@ webr:
     - Lahman
 ---
 
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
 In this episode we will see how a small number of functions can be used to *transform* your data. What do we mean by *transform*? When we receive raw data we often need to perform some basic tidying, sorting, or trimming to get it into a format that is clean and easy for us to work with. 
 
 Transforming data can involve:
@@ -26,7 +28,7 @@ We can do all of these transformations using a small number of functions from th
 
 To prevent the feeling of being overwhelmed by new functions, let's start by listing the functions. To work with rows we only have three: **arrange()**, **filter()**, **distinct()**. To work with columns, we have four: **relocate()**, **select()**, **rename()**, **mutate()**. 
 
-Of these seven new functions, six of them have names that are probably easy to interpret: arrange() and relocate() change the order of rows and columns, filter() and select() keep only certain rows and columns, rename() changes the name of columns. Only mutate() is not immediately obvious: mutate creates a new column based on one or more other columns (we can think of the data being mutated into a new form). 
+Of these seven new functions, six of them have names that are probably easy to interpret: arrange() and relocate() change the order of rows and columns, filter() and select() keep only certain rows and columns, distinct() returns only unique rows (removes duplicates), and rename() changes the name of columns. Only mutate() is not immediately obvious: mutate creates a new column based on one or more other columns (we can think of the data being mutated into a new form). 
 
 For each of these seven functions we will look at the basic syntax, how the arguments can be used, and complete some exercises. 
 
@@ -309,7 +311,7 @@ What if you wanted to select all columns that contained either "R" or "r"?
 bbPitching |> ______ |> head()
 ```
 
-::: { .hint exercise="ex2_5}
+::: { .hint exercise="ex2_5"}
 ::: { .callout-note collapse="false"}
 
 We need to use the "or" key: |
@@ -335,5 +337,81 @@ In this format, the select() function will return any column that "contains R" *
 :::
 
 
+## mutate()
+
+Unlike the other dplyr verbs, the purpose of the mutate() function isn't immediately obvious from the name. The mutate() function will take information from one or more columns and create a new column to store the data in. 
+
+Here we will calculate a new value, called the winLossRatio, by dividing W by L for each row. Note the slightly different format for mutate(), which is the convention.
+
+```{webr}
+bbPitching |> mutate(
+  winLossRatio = W/L
+  ) |> head()
+```
+
+We can see that this hasn't worked as planned (or rather, it has worked as we planned, but there were unforeseen outcomes like Inf values).
+
+In the space below, write code required to remove any row where W or L is 0, then use the mutate() function from above to create the new winLossRatio column. Use the head() function to display your results. Feel free to add additional functions and arguments if you think they are useful. 
+
+```{webr}
+#| exercise: ex2_6
+______ |> ______ |> ______ |> ______
+```
+
+::: { .hint exercise="ex2_6"}
+::: { .callout-note collapse="false"}
+
+The four underscores could be replaced with:
+
+- The bbPitching dataset to be passed.
+
+- The filter() function, using the "&" argument to set both W and L > 0.
+
+- The mutate() function, creating winLossRatio by dividing W/L.
+
+- The head() function.
+
+:::
+:::
+
+::: { .solution exercise="ex2_6"}
+::: { .callout-note collapse="false"}
+
+bbPitching |> filter(W > 0 & L > 0) |> mutate(winLossRatio = W/L) |> head()
+
+Out of interest, you could ask what the highest ratio is:
+
+bbPitching |> filter(W > 0 & L > 0) |> mutate(winLossRatio = W/L, .before = playerID) |> arrange(winLossRatio) |> tail()
+
+Alternatively, you could use arrange(desc(winLossRatio)) and head(). 
+
+Here I've also added the .before = argument, which we have seen (along with .after) with the relocate() function.
+:::
+:::
+
+The solution to this exercise highlights the fact that mutate has created a new column that we can then apply functions to for further filtering or arranging of the dataset. 
+
+
+
+
+
+
+## distinct() and rename()
+
+These are both useful functions, though compared to mutate() or even arrange(), these functions are quite simple and so will only receive a short note here. 
+
+The distinct() function will remove any duplicate rows and return the remaining unique (distinct) rows. By supplying two or more column names, we can look for distinct groupings. In the code below, I first use the table() function to determine that there are 19 rows for the first year of recording (1871). I then use the arrange() and head() functions (with an additional argument for the head function) to pass only data from 1871 to the distinct() function. Then, distinct(yearID, teamID) will return only those distinct combinations - revealing the names of the nine teams who were recorded in the first year.
+
+```{webr}
+bbPitching |> arrange(yearID) |> head(n = 19) |> distinct(yearID, teamID)
+```
+
+The rename() function takes an existing column name (BAOpp) and replaces it with a supplied name (BattingAverageOpponent):
+```{webr}
+bbPitching |> rename(BattingAverageOpponent = BAOpp) |> head()
+```
+
+
+## Conclusions
 Conclude with the 'things they have in common' information
 
