@@ -341,22 +341,21 @@ In this format, the select() function will return any column that "contains R" *
 
 Unlike the other dplyr verbs, the purpose of the mutate() function isn't immediately obvious from the name. The mutate() function will take information from one or more columns and create a new column to store the data in. 
 
-Here we will calculate a new value, called the winLossRatio, by dividing W by L for each row. Note the slightly different format for mutate(), which is the convention.
+Here we will calculate a new value, called the winLossRatio, by dividing W by L for each row. The new column will appear to the far right of the dataset.
 
 ```{webr}
-bbPitching |> mutate(
-  winLossRatio = W/L
-  ) |> head()
+bbPitching |> mutate(winLossRatio = W/L) |> head()
 ```
 
 We can see that this hasn't worked as planned (or rather, it has worked as we planned, but there were unforeseen outcomes like Inf values).
 
-In the space below, write code required to remove any row where W or L is 0, then use the mutate() function from above to create the new winLossRatio column. Use the head() function to display your results. Feel free to add additional functions and arguments if you think they are useful. 
+In the space below, use the filter() function to remove any row where W or L is 0, then use the mutate() function to create the new winLossRatio column. Use the head() function to display your results. Feel free to add additional functions and arguments if you think they are useful. 
 
 ```{webr}
 #| exercise: ex2_6
 ______ |> ______ |> ______ |> ______
 ```
+
 
 ::: { .hint exercise="ex2_6"}
 ::: { .callout-note collapse="false"}
@@ -379,9 +378,11 @@ The four underscores could be replaced with:
 
 bbPitching |> filter(W > 0 & L > 0) |> mutate(winLossRatio = W/L) |> head()
 
-Out of interest, you could ask what the highest ratio is:
+
+Out of interest, you could ask what the highest ratio is with arrange() and tail() (remembering that arrange sorts from smallest to largest by default).
 
 bbPitching |> filter(W > 0 & L > 0) |> mutate(winLossRatio = W/L, .before = playerID) |> arrange(winLossRatio) |> tail()
+
 
 Alternatively, you could use arrange(desc(winLossRatio)) and head(). 
 
@@ -390,8 +391,6 @@ Here I've also added the .before = argument, which we have seen (along with .aft
 :::
 
 The solution to this exercise highlights the fact that mutate has created a new column that we can then apply functions to for further filtering or arranging of the dataset. 
-
-
 
 
 
@@ -415,3 +414,5 @@ bbPitching |> rename(BattingAverageOpponent = BAOpp) |> head()
 ## Conclusions
 Conclude with the 'things they have in common' information
 
+
+The final thing to take away from this episode is how easily we can chain together functions to manipulate our data into a form that suits us. With the pipe we can add many steps and they remain human readable: moving from left to right we start with data, we can filter it, calculate a new value, arrange the data, and view a portion of it. 
