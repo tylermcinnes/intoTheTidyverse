@@ -23,7 +23,7 @@ bbBatting |> head()
 ```
 
 First, let's see how we can use the mean function to calculate the average number of games (G) in the dataset:
-```{r}
+```{webr}
 bbBatting$G |> mean()
 ```
 #### Note on the dataset

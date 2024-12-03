@@ -90,6 +90,46 @@
     ]
   },
   {
+    "objectID": "episode_3_groups.html",
+    "href": "episode_3_groups.html",
+    "title": "Episode 3 Groups",
+    "section": "",
+    "text": "Sometimes we will have a single object that has data for many different groups. This could include many samples from e.g., treatment vs control, or it could be many groups (e.g., three replicates each from many samples). Other examples of groups could include months or years in which data was collected, or distinct physical locations where data was collected. Whatever the specifics, group_by() is a function that will allow us to keep all our data in a single object and also recognise the different groups or substructure within the object.\n\n\n\n\n\n\n\n\nFirst, let’s see how we can use the mean function to calculate the average number of games (G) in the dataset:\n\n\n\n\n\n\n\n\n\n\nRemember that for this dataset, each row represents a players data. E.g., the first row shows player aardsda01’s 2004 results. They played 11 games for the SFN team, and scored 0 runs (R) (probably because they are a pitcher, rather than a batter).\nNow let’s say I want to calculate the mean number of games for each team. First, I’ll use group_by() on the teamID column. Second, I’ll use the summarize() and mean() functions to generate a new column of data showing the mean number of games for each team.\n\n\n\n\n\n\n\n\n\n\n\nWhich year had the highest average number of Runs (the R column) scored? Which year had the lowest average number of runs?\nTreat this as an open book, group exercise - consult each other, your notes from previous lessons, anything you like.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nHint 1\nYou will need to pipe the bbBatting data to the group_by() function, with yearID as the argument.\nPipe this information to summarize(). Within summarize, create a new column name and define it was mean(R).\nTo get the highest and lowest, you will need to rearrange the output of summarize() using a function, and then use separate functions to view the highest and lowest averages.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nHint 2\nPipe the output of summarize() to the arrange() function, then use the head() and tail() function. Alternatively, you can use head() only if you prefer to add the desc() function within arrange().\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nbbBatting |&gt; group_by(yearID) |&gt; summarize(yearlyMeanRuns = mean(R)) |&gt; arrange(yearlyMeanGames) |&gt; head()",
+    "crumbs": [
+      "Episode 3 - Grouping"
+    ]
+  },
+  {
+    "objectID": "episode_3_groups.html#the-group_by-function",
+    "href": "episode_3_groups.html#the-group_by-function",
+    "title": "Episode 3 Groups",
+    "section": "",
+    "text": "Sometimes we will have a single object that has data for many different groups. This could include many samples from e.g., treatment vs control, or it could be many groups (e.g., three replicates each from many samples). Other examples of groups could include months or years in which data was collected, or distinct physical locations where data was collected. Whatever the specifics, group_by() is a function that will allow us to keep all our data in a single object and also recognise the different groups or substructure within the object.\n\n\n\n\n\n\n\n\nFirst, let’s see how we can use the mean function to calculate the average number of games (G) in the dataset:\n\n\n\n\n\n\n\n\n\n\nRemember that for this dataset, each row represents a players data. E.g., the first row shows player aardsda01’s 2004 results. They played 11 games for the SFN team, and scored 0 runs (R) (probably because they are a pitcher, rather than a batter).\nNow let’s say I want to calculate the mean number of games for each team. First, I’ll use group_by() on the teamID column. Second, I’ll use the summarize() and mean() functions to generate a new column of data showing the mean number of games for each team.\n\n\n\n\n\n\n\n\n\n\n\nWhich year had the highest average number of Runs (the R column) scored? Which year had the lowest average number of runs?\nTreat this as an open book, group exercise - consult each other, your notes from previous lessons, anything you like.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nHint 1\nYou will need to pipe the bbBatting data to the group_by() function, with yearID as the argument.\nPipe this information to summarize(). Within summarize, create a new column name and define it was mean(R).\nTo get the highest and lowest, you will need to rearrange the output of summarize() using a function, and then use separate functions to view the highest and lowest averages.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nHint 2\nPipe the output of summarize() to the arrange() function, then use the head() and tail() function. Alternatively, you can use head() only if you prefer to add the desc() function within arrange().\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nbbBatting |&gt; group_by(yearID) |&gt; summarize(yearlyMeanRuns = mean(R)) |&gt; arrange(yearlyMeanGames) |&gt; head()",
+    "crumbs": [
+      "Episode 3 - Grouping"
+    ]
+  },
+  {
+    "objectID": "episode_3_groups.html#use-of-summarize-with-multiple-arguments",
+    "href": "episode_3_groups.html#use-of-summarize-with-multiple-arguments",
+    "title": "Episode 3 Groups",
+    "section": "Use of summarize() with multiple arguments",
+    "text": "Use of summarize() with multiple arguments",
+    "crumbs": [
+      "Episode 3 - Grouping"
+    ]
+  },
+  {
+    "objectID": "episode_3_groups.html#use-of-slice",
+    "href": "episode_3_groups.html#use-of-slice",
+    "title": "Episode 3 Groups",
+    "section": "Use of slice()",
+    "text": "Use of slice()",
+    "crumbs": [
+      "Episode 3 - Grouping"
+    ]
+  },
+  {
     "objectID": "episode_2_dataTransformations.html",
     "href": "episode_2_dataTransformations.html",
     "title": "Episode 2 Transforming your data",
