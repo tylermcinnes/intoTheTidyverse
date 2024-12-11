@@ -7,6 +7,9 @@ webr:
     - dplyr
     - tidytuesdayR
     - readr
+    - ggplot2
+    - viridis
+    - ggtext
 ---
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
@@ -25,6 +28,10 @@ In this instance we will load the data from 2024-12-10 (December 10th, 2024). Th
 ```{webr}
 parfumo_data_clean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-12-10/parfumo_data_clean.csv')
 ```
+
+To learn more about this dataset, visit:
+https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-12-10/readme.md
+
 
 ## Explore the data
 
@@ -47,3 +54,130 @@ What other functions do you normally use for looking at a fresh dataset? I've no
 parfumo_data_clean |> ______
 ```
 
+There are a lot of possibilities in terms of visualizations here. We could look at what notes appear most frequently (what aromas people are detecting), the concentrations of different perfumes, or the names of the different perfumes. 
+
+As an amateur in the perfume world, I'm asking what brands reliably score highly ratings. 
+
+## Brand ratings
+
+I will use the group_by() function to group perfumes into brands, the summarize function to calculate an average (mean) rating score, and a combination of arrange() and desc() to sort brands based on their mean scores. 
+
+```{webr}
+parfumo_data_clean |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> 
+  arrange(desc(avg_Rating)) |> 
+  head()
+```
+
+Hmmm - two brands have a 10/10 rating (at least, I know from the summarize() function that the *max* rating is 10, and therefore I'm assuming it's *out of* 10). I also know from summarize that the rating count (the number of times the perfume was rated) ranges from 2 - 2,732, with a median of 19 and a mean of 60. I'm concerned that a 10/10 rating could come about from a brand having only a single perfume that was rated twice. 
+
+Before going any further, let's visualize the relationship between average rating and rating count:
+
+```{webr}
+ggplot(data = parfumo_data_clean, mapping = aes(x = Rating_Count, y = Rating_Value)) +
+  geom_point()
+```
+
+It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground, smoothing over the person-to-person preferences for scents. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.
+
+I'll add in a filter() step, keeping only rows with a rating_count value that is greater than or equal to the median of 19. With this filter, I can be somewhat confident that ratings are not going to be down to individual preferences for scent. 
+
+### Which brands have the highest rating across their perfumes?
+
+```{webr}
+parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
+            number_Perfumes = n()) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 10)
+```
+
+I can see an issue here - some of these brands have only one or two perfumes. Conceivably, it would be difficult for brands with e.g., 100 perfumes to consistently receive such high ratings, and they will therefore not show up in this list. This is essentially the same issue dealt with above - having fewer ratings, or fewer products, means an average score can be skewed.
+
+To deal with this, I've added an arbitrary filtering threshold for a brand to have 20 or more perfumes in order to be considered.
+
+```{webr}
+parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = round(mean(Rating_Value, na.rm = TRUE), 1),
+            number_Perfumes = n()) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 10)
+```
+
+## Visualizing brand ratings
+
+First, I have a 'basic' visualization of brand ratings. If you are new to ggplot, there's a fair amount going on here, but not much more than what was covered in Episode 1. 
+```{webr}
+ggplot(brandRatingData, 
+       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(size = number_Perfumes, color = avg_Rating)) +
+  scale_color_gradient(low = "lightblue", high = "darkblue", name = "Brand rating") +
+  scale_size(range = c(1, 10), name = "Number of perfumes") +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Mean perfume rating by brand"
+  ) +
+  theme_light() +
+  theme(
+    axis.text.y = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
+  ) +
+  guides(color = "none")
+```
+
+### Improving the visuals
+
+What can I do to enhance the visuals to be cleaner, more dynamic, more eye-catching, more aesthetic? Is there any other data I can include to improve the plot?
+
+Thinking back to my earlier filtering based on rating count, I realize what I'm doing is placing a higher weighting on perfumes that have been rated *more often*. I would like to be able to see rating count in my plot.
+
+```{webr}
+# Add a new summarize output: the average rating count.
+brandRatingData <- parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
+            number_Perfumes = n(),
+            avg_rating_count = mean(Rating_Count)) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 20)
+```
+
+```{webr}
+ggplot(brandRatingData, 
+       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(size = number_Perfumes, color = avg_rating_count)) +
+  scale_color_viridis(option = "magma", direction = -1, name = "Mean number of ratings") +
+  scale_size(range = c(1, 10), name = "Number of perfumes") +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Top 20 Perfume Brands Ranked by Mean Rating"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 10, color = "gray40"),
+    axis.title = element_text(size = 12, face = "bold", color = "gray50"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5, color = "gray50"),
+    legend.title = element_text(size = 12, face = "bold", color = "gray50"), 
+    legend.text = element_text(size = 10, color = "gray40"),
+    plot.subtitle = element_textbox_simple(size = 12, color = "gray50", 
+                                           margin = margin(t = 30, b = 30), 
+                                           width = unit(1, "npc"))
+  ) 
+```
+
+## Conclusions
+
+Initially I wasn't utilising colour mapping for anything useful, but then added colour as a way to visualize the total number of ratings (not shown here), and eventually average number of ratings. Total number of ratings showed Roja Parfums, Chanel, and Guerlain as positive outliers with a high number of ratings relative to the other 17 brands. Average number of ratings shows that while Ensar Oud / Oriscent have the highest average brand rating, Roja Parfums and Chanel have a much higher average number of ratings, which further supports them as a good brand to choose.
+
+As a data story, I really like this: based on Brand rating alone, one might choose Ensar Oud, but with a more full picture, I'd personally be inclined to choose Roja Parfums or Chanel - the difference in Brand rating between them and Ensar Oud is very small, but with Chanel there are approximately **five times** as many ratings, giving the overall brand rating much more weight.

@@ -14,7 +14,7 @@
     "href": "episode_4_tidytuesday.html#loading-the-data",
     "title": "Episode 4 Tidy Tuesday",
     "section": "Loading the data",
-    "text": "Loading the data\nIn this instance we will load the data from 2024-12-10 (December 10th, 2024). The dataset is perfume data - perfume brands, names, ratings, concentrations, and the different aromas people detect in the perfumes.",
+    "text": "Loading the data\nIn this instance we will load the data from 2024-12-10 (December 10th, 2024). The dataset is perfume data - perfume brands, names, ratings, concentrations, and the different aromas people detect in the perfumes.\n\n\n\n\n\n\n\n\nTo learn more about this dataset, visit: https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-12-10/readme.md",
     "crumbs": [
       "Episode 4 - tidytuesday"
     ]
@@ -24,7 +24,37 @@
     "href": "episode_4_tidytuesday.html#explore-the-data",
     "title": "Episode 4 Tidy Tuesday",
     "section": "Explore the data",
-    "text": "Explore the data\nThis is a totally unknown dataset. When we don’t know anything at all about the data, I find functions like colnames(), head(), and summary() to be a really useful place to start.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhat other functions do you normally use for looking at a fresh dataset? I’ve noticed that people tend to develop their favourites, highlighting the different ways we all think about data.",
+    "text": "Explore the data\nThis is a totally unknown dataset. When we don’t know anything at all about the data, I find functions like colnames(), head(), and summary() to be a really useful place to start.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhat other functions do you normally use for looking at a fresh dataset? I’ve noticed that people tend to develop their favourites, highlighting the different ways we all think about data.\n\n\n\n\n\n\n\n\nThere are a lot of possibilities in terms of visualizations here. We could look at what notes appear most frequently (what aromas people are detecting), the concentrations of different perfumes, or the names of the different perfumes.\nAs an amateur in the perfume world, I’m asking what brands reliably score highly ratings.",
+    "crumbs": [
+      "Episode 4 - tidytuesday"
+    ]
+  },
+  {
+    "objectID": "episode_4_tidytuesday.html#brand-ratings",
+    "href": "episode_4_tidytuesday.html#brand-ratings",
+    "title": "Episode 4 Tidy Tuesday",
+    "section": "Brand ratings",
+    "text": "Brand ratings\nI will use the group_by() function to group perfumes into brands, the summarize function to calculate an average (mean) rating score, and a combination of arrange() and desc() to sort brands based on their mean scores.\n\n\n\n\n\n\n\n\nHmmm - two brands have a 10/10 rating (at least, I know from the summarize() function that the max rating is 10, and therefore I’m assuming it’s out of 10). I also know from summarize that the rating count (the number of times the perfume was rated) ranges from 2 - 2,732, with a median of 19 and a mean of 60. I’m concerned that a 10/10 rating could come about from a brand having only a single perfume that was rated twice.\nBefore going any further, let’s visualize the relationship between average rating and rating count:\n\n\n\n\n\n\n\n\nIt seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground, smoothing over the person-to-person preferences for scents. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.\nI’ll add in a filter() step, keeping only rows with a rating_count value that is greater than or equal to the median of 19. With this filter, I can be somewhat confident that ratings are not going to be down to individual preferences for scent.\n\nWhich brands have the highest rating across their perfumes?\n\n\n\n\n\n\n\n\nI can see an issue here - some of these brands have only one or two perfumes. Conceivably, it would be difficult for brands with e.g., 100 perfumes to consistently receive such high ratings, and they will therefore not show up in this list. This is essentially the same issue dealt with above - having fewer ratings, or fewer products, means an average score can be skewed.\nTo deal with this, I’ve added an arbitrary filtering threshold for a brand to have 20 or more perfumes in order to be considered.",
+    "crumbs": [
+      "Episode 4 - tidytuesday"
+    ]
+  },
+  {
+    "objectID": "episode_4_tidytuesday.html#visualizing-brand-ratings",
+    "href": "episode_4_tidytuesday.html#visualizing-brand-ratings",
+    "title": "Episode 4 Tidy Tuesday",
+    "section": "Visualizing brand ratings",
+    "text": "Visualizing brand ratings\nFirst, I have a ‘basic’ visualization of brand ratings. If you are new to ggplot, there’s a fair amount going on here, but not much more than what was covered in Episode 1.\n\n\n\n\n\n\n\n\n\nImproving the visuals\nWhat can I do to enhance the visuals to be cleaner, more dynamic, more eye-catching, more aesthetic? Is there any other data I can include to improve the plot?\nThinking back to my earlier filtering based on rating count, I realize what I’m doing is placing a higher weighting on perfumes that have been rated more often. I would like to be able to see rating count in my plot.",
+    "crumbs": [
+      "Episode 4 - tidytuesday"
+    ]
+  },
+  {
+    "objectID": "episode_4_tidytuesday.html#conclusions",
+    "href": "episode_4_tidytuesday.html#conclusions",
+    "title": "Episode 4 Tidy Tuesday",
+    "section": "Conclusions",
+    "text": "Conclusions\nInitially I wasn’t utilising colour mapping for anything useful, but then added colour as a way to visualize the total number of ratings (not shown here), and eventually average number of ratings. Total number of ratings showed Roja Parfums, Chanel, and Guerlain as positive outliers with a high number of ratings relative to the other 17 brands. Average number of ratings shows that while Ensar Oud / Oriscent have the highest average brand rating, Roja Parfums and Chanel have a much higher average number of ratings, which further supports them as a good brand to choose.\nAs a data story, I really like this: based on Brand rating alone, one might choose Ensar Oud, but with a more full picture, I’d personally be inclined to choose Roja Parfums or Chanel - the difference in Brand rating between them and Ensar Oud is very small, but with Chanel there are approximately five times as many ratings, giving the overall brand rating much more weight.",
     "crumbs": [
       "Episode 4 - tidytuesday"
     ]
