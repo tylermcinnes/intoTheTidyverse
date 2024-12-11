@@ -6,6 +6,7 @@ webr:
   packages:
     - dplyr
     - tidytuesdayR
+    - readr
 ---
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
@@ -22,7 +23,7 @@ In the data directory you can find every tidytuesday event, complete with data a
 
 In this instance we will load the data from 2024-12-10 (December 10th, 2024). The dataset is perfume data - perfume brands, names, ratings, concentrations, and the different aromas people detect in the perfumes.  
 ```{webr}
-parfumo_data_clean <- tidytuesdayR::tt_load('2024-12-10')
+parfumo_data_clean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-12-10/parfumo_data_clean.csv')
 ```
 
 ## Explore the data
@@ -41,8 +42,8 @@ parfumo_data_clean |> head()
 parfumo_data_clean |> summary()
 ```
 
+What other functions do you normally use for looking at a fresh dataset? I've noticed that people tend to develop their favourites, highlighting the different ways we all think about data.
 ```{webr}
-# What other functions do you normally use for looking at a fresh dataset? I've noticed that people tend to develop their favourites, highlighting the different ways we all think about data.
 parfumo_data_clean |> ______
 ```
 
