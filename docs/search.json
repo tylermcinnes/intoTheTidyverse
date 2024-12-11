@@ -24,7 +24,7 @@
     "href": "episode_4_tidytuesday.html#explore-the-data",
     "title": "Episode 4 Tidy Tuesday",
     "section": "Explore the data",
-    "text": "Explore the data\nThis is a totally unknown dataset. When we don’t know anything at all about the data, I find functions like colnames(), head(), and summary() to be a really useful place to start.",
+    "text": "Explore the data\nThis is a totally unknown dataset. When we don’t know anything at all about the data, I find functions like colnames(), head(), and summary() to be a really useful place to start.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhat other functions do you normally use for looking at a fresh dataset? I’ve noticed that people tend to develop their favourites, highlighting the different ways we all think about data.",
     "crumbs": [
       "Episode 4 - tidytuesday"
     ]
