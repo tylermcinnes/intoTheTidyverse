@@ -17,7 +17,9 @@ website:
       - text: "Episode 2 - Data Transformations"
         href: episode_2_dataTransformations.qmd
       - text: "Episode 3 - Grouping"
-        href: episode_3_groups.qmd  
+        href: episode_3_groups.qmd 
+      - text: "Episode 4 - tidytuesday"
+        href: episode_4_tidytuesday.qmd   
   
 
 format:

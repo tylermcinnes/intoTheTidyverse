@@ -1,0 +1,48 @@
+---
+title: "Episode 4 Tidy Tuesday"
+engine: knitr
+format: live-html
+webr:
+  packages:
+    - dplyr
+    - tidytuesdayR
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+
+"tidytuesday" is a weekly community event aimed at getting people involved in data exploration and visualisation. Each week a dataset is provided and a brief is given out. The brief includes an overview of the dataset and recommends a focus (*e.g.,* search for relationships within certain categories, how could this dataset be tidied, what visualisations work best with this type of data). Community members are encouraged to share their code publicly (however complex, basic, neat or imperfect it might be). You can search #tidytuesday on social media platforms like LinkedIn to see what other people did with the data. 
+
+The tidytuesday project github can be found here: https://github.com/rfordatascience/tidytuesday
+
+In the data directory you can find every tidytuesday event, complete with data and brief, going back to 2018. The best way to interact with this browser is to use the drop-down tabs on the left-hand side. Selecting any given date directory (e.g., 2022-02-01) will display the readme, which gives the overview and explains how to access the data. 
+
+
+## Loading the data
+
+In this instance we will load the data from 2024-12-10 (December 10th, 2024). The dataset is perfume data - perfume brands, names, ratings, concentrations, and the different aromas people detect in the perfumes.  
+```{webr}
+parfumo_data_clean <- tidytuesdayR::tt_load('2024-12-10')
+```
+
+## Explore the data
+
+This is a totally unknown dataset. When we don't know anything at all about the data, I find functions like colnames(), head(), and summary() to be a really useful place to start. 
+
+```{webr}
+parfumo_data_clean |> colnames()
+```
+
+```{webr}
+parfumo_data_clean |> head()
+```
+
+```{webr}
+parfumo_data_clean |> summary()
+```
+
+```{webr}
+# What other functions do you normally use for looking at a fresh dataset? I've noticed that people tend to develop their favourites, highlighting the different ways we all think about data.
+parfumo_data_clean |> ______
+```
+

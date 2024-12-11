@@ -79,6 +79,28 @@ bbBatting |> group_by(yearID) |> summarize(yearlyMeanRuns = mean(R)) |> arrange(
 :::
 :::
 
+### Arguments for group_by
+.groups
+  
+  - "drop"
+
+  - "drop_last"
+
+  - "keep"
+
+  - "rowwise"
+
+What's the purpose of "drop"?
+
+1. It provides a clean output.
+
+2. Prevents accidental behavior in later operations.
+
+3. Makes your code more predictable and easier to understand.
+
+
+### Summarize: Counts with n, n_distinct
+
 
 ## Use of summarize() with multiple arguments
 
