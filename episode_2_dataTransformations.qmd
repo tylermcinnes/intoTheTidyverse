@@ -115,13 +115,15 @@ The relocate() function is more flexible when we start to use the **.before** an
 bbPitching |> relocate(ERA, .after = playerID) |> head()
 ```
 
+The code above is relocating the ERA column, not to the far left as normal, but to immediately after (to the right of) the playerID column.
+
 Use the relocate() function to get the column names in this order: 
 
-The first six columns must be in this order: playerID, W, L, G, yearID, teamID, with stint and lgID *as the last two columns* The other columns can go in any order.
+The first six columns must be in this order: playerID, W, L, G, yearID, teamID, with stint and lgID *as the last two columns*. The other columns can go in any order. Note: you might end up using more pipes and ______ than currently shown in the exercise box! The exercise box is actually a free space where you can type whatever code you want. Remember to finish with " |> head() " to display only the top section of your result!
 
 ```{webr}
 #| exercise: ex2_2
-______ |> ______ |> head()
+______ |> ______ |> 
 ```
 
 ::: { .hint exercise="ex2_2"}
@@ -412,7 +414,9 @@ bbPitching |> rename(BattingAverageOpponent = BAOpp) |> head()
 
 
 ## Conclusions
-Conclude with the 'things they have in common' information
 
+With just seven functions you can now keep or discard rows and columns based on a wide variety of options, rearrange and rename rows and columns, and create new columns based on existing data. These dplyr verbs give you a great level of control over your dataset and are the type of function you might expect to use on a regular basis.  
 
 The final thing to take away from this episode is how easily we can chain together functions to manipulate our data into a form that suits us. With the pipe we can add many steps and they remain human readable: moving from left to right we start with data, we can filter it, calculate a new value, arrange the data, and view a portion of it. 
+
+In the next episode we will introduce grouping, which will give us even finer control over how our dataset is structured and modified. a

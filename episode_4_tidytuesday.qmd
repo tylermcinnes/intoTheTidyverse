@@ -15,6 +15,10 @@ webr:
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
 
+So far you've learned some of the basics of both ggplot and the tidyverse. In this brief episode you will see a real example of the dplyr verbs being used to transform a dataset for visualisation. 
+
+## tidytuesday
+
 "tidytuesday" is a weekly community event aimed at getting people involved in data exploration and visualisation. Each week a dataset is provided and a brief is given out. The brief includes an overview of the dataset and recommends a focus (*e.g.,* search for relationships within certain categories, how could this dataset be tidied, what visualisations work best with this type of data). Community members are encouraged to share their code publicly (however complex, basic, neat or imperfect it might be). You can search #tidytuesday on social media platforms like LinkedIn to see what other people did with the data. 
 
 The tidytuesday project github can be found here: https://github.com/rfordatascience/tidytuesday

@@ -13,6 +13,7 @@ webr:
 ## The group_by() function
 
 Sometimes we will have a single object that has data for many different groups. This could include many samples from e.g., treatment vs control, or it could be many groups (e.g., three replicates each from many samples). Other examples of groups could include months or years in which data was collected, or distinct physical locations where data was collected. 
+
 Whatever the specifics, group_by() is a function that will allow us to keep all our data in a single object and *also* recognise the different groups or substructure within the object. 
 
 
@@ -28,13 +29,17 @@ bbBatting$G |> mean()
 ```
 #### Note on the dataset
 
-Remember that for this dataset, each row represents a players data. E.g., the first row shows player aardsda01's 2004 results. They played 11 games for the SFN team, and scored 0 runs (R) (probably because they are a pitcher, rather than a batter). 
+Remember that for this dataset, each row represents a player's data. *e.g.,* the first row shows player aardsda01's 2004 results. They played 11 games for the SFN team, and scored 0 runs (R) (probably because they are a pitcher, rather than a batter). 
 
 Now let's say I want to calculate the mean number of games for each team. First, I'll use group_by() on the teamID column. Second, I'll use the summarize() and mean() functions to generate a new column of data showing the mean number of games for each team. 
 
 ```{webr}
 bbBatting |> group_by(teamID) |> summarize(teamMeanGames = mean(G)) 
 ```
+
+Here, group_by has modified the behaviour of functions that follow. Instead of treating the bbBatting object as a single dataset, every row with the same teamID will be treated as a group, and the summarize function can be used to calculate the mean number of games for each individual teamID. 
+
+The summarize() function works very similarly to mutate() in that it creates a new column, with a name we define, based on some type of calculation. However, unlike mutate(), the summarize() function returns *only* the new column, and normally returns only a single value per group. 
 
 #### Exercise
 
@@ -79,31 +84,201 @@ bbBatting |> group_by(yearID) |> summarize(yearlyMeanRuns = mean(R)) |> arrange(
 :::
 :::
 
-### Arguments for group_by
+#### An important note about group_by()
+
+Previously, with the dplyr verbs, we saw that original data is never modified (and this is a principal we should adhere to). It is worth noting that if we save data to a new object after grouping, that grouping substructure is sometimes preserved. Therefore any further functions will be applied in a group-by-group setting. We can explicitly control how groups are preserved using the .groups argument in the summarize() function.
+
 .groups
   
-  - "drop"
+  - "drop" will remove all grouping behaviour, the resulting output will have no groups.
 
-  - "drop_last"
+  - "drop_last" will remove only the last grouping (e.g., if group_by(Year, Month, Day) was used, Year and Month grouping is preserved and Day is dropped. Note that drop_last is the default behaviour.  
 
-  - "keep"
+  - "keep" will keep all grouping.
 
-  - "rowwise"
+  - "rowwise" will keep rowwise grouping.
 
-What's the purpose of "drop"?
+drop, and by default drop_last, are recommended as they: 
 
-1. It provides a clean output.
+1. Provide a clean output.
 
-2. Prevents accidental behavior in later operations.
+2. Prevent accidental behavior in later operations.
 
 3. Makes your code more predictable and easier to understand.
 
+On point 3., it is clearer if you drop grouping and later regroup when, or if, required.
 
-### Summarize: Counts with n, n_distinct
+
+### Arguments for summarize()
+
+So far we have just looked at using the summarize() function with a single argument, but there is more we can do with this function. Summarize() can create as many summaries as required in a single call. Useful functions within summarize() include: 
+
+- mean(), median()
+
+- sd(), mad() 
+
+- min(), max()
+
+- first(), last(), nth() (these functions will return the first, last or nth value from each group)
+
+- n(), n_distinct() (count the total number of rows, or the total number of distinct/unique rows within the each group)
 
 
-## Use of summarize() with multiple arguments
+
+### Working with summarize()
+
+Now that we've seen group_by() and some of the argument summarize() can take, we can use them to get a better understanding of our data.
+
+After using the head() function, I can see that some possible useful grouping categories are the playerID, yearID, teamID, and lgID columns. 
+
+With these groups, we could use any of the summarize() arguments from above to ask questions about our dataset. 
+
+#### Exercises
+
+Which player has hit the highest number of Home Runs (HR)? How many Home Runs have they hit in total?
+```{webr}
+#| exercise: ex3_2
+bbBatting |> ______ |> ______(totalHomeRun = ______) |> ______(desc(totalHomeRun)) |> head()
+```
+
+::: { .hint exercise="ex3_2"}
+::: { .callout-note collapse="false"}
+
+group_by(), summarize(), sum(), arrange() are useful functions!
+
+:::
+:::
+
+::: { .solution exercise="ex3_2"}
+::: { .callout-note collapse="false"}
+
+bbBatting |> group_by(playerID) |> summarize(totalHR = sum(HR)) |> arrange(desc(totalHR)) |> head()
+
+:::
+:::
+
+
+What are the top 10 years in terms of total games (G) played?
+```{webr}
+#| exercise: ex3_3
+bbBatting |> ______ |> ______(totalGames = ______) |> ______(______(______)) |> _______
+```
+
+::: { .hint exercise="ex3_3"}
+::: { .callout-note collapse="false"}
+
+This question is very similar to the question above! Remember that when we use summarize(), we need to *define* the name of the new column we are creating. That name will be used later. 
+
+The head() and print() commands can both take arguments that control how many lines are displayed. head() just takes a number, print takes " n = ".
+
+:::
+:::
+
+::: { .solution exercise="ex3_3"}
+::: { .callout-note collapse="false"}
+
+bbBatting |> group_by(yearID) |> summarize(totalGames = sum(G)) |> arrange(desc(totalGames)) |> head(10)
+
+:::
+:::
+
+
+How many runs have been made in total in the most recent 10 years? How does this compare to the *first* 10 years?
+```{webr}
+#| exercise: ex3_4
+bbBatting |> group_by(yearID) |> summarize(______ = sum(R)) |> ______(______(______)) |> ______ |> ______
+```
+
+::: { .hint exercise="ex3_4"}
+::: { .callout-note collapse="false"}
+
+This question has similarities to the question above. You will need to calculate the total number of runs per year, then arrange the output by yearID. Take the top 10 rows with head(10) or print(n = 10), and pipe it to the sum() function.
+
+If you are doing the first 10 years, you technically don't need the arrange() function at all (because the output of group_by will already be in order) - but it's always better to be clear about what you are doing!
+
+:::
+:::
+
+::: { .solution exercise="ex3_4"}
+::: { .callout-note collapse="false"}
+
+bbBatting |> group_by(yearID) |> summarize(totalRuns = sum(R)) |> arrange(desc(yearID)) |> head(10) |> sum()
+
+bbBatting |> group_by(yearID) |> summarize(totalRuns = sum(R)) |> arrange(desc(yearID)) |> tail(10) |> sum()
+
+**Note** because I argue above that it's worth being clear and keeping the arrange function even when calculating the first 10 years, I could remove the desc() function within arrange() and the rows would be ordered from smallest (earliest) to largest (most recent). *However*, in the interest of clarity I think it's much easier to differentiate the two rows when the change is nearer the end, so I've switched out head(10) for tail(10). 
+:::
+:::
+
+In the free space below, try out some other groups and summarize results. See if you can find anything interesting!
+```{webr}
+
+```
+
+
 
 ## Use of slice()
 
+The slice() functions provides a useful set of tools for interacting with certain rows *within* each group. 
 
+slice_head(n = 1) will return the first row of each group. For example, I can group by yearID, arrange the rows within years by Games played (descending), and then use slice_head(n = 1) to return the player (row) with the highest number of games played for each year:
+```{webr}
+bbBatting |> group_by(yearID) |> arrange(desc(G)) |> slice_head(n = 1)
+```
+
+slice_tail(n = 1) will return the *last* row of each group. 
+
+If, like in the example above, we are looking for the highest or lowest number, we can instead use slice_min() or slice_max(). Both of these arguments require us to specify the column name we want the min/max value from, and as above, we can specify the number of rows we return with n = 1.
+
+This code will return the earliest (min) year a player has a record.
+```{webr}
+bbBatting |> group_by(playerID) |> slice_min(yearID, n = 1)
+```
+
+#### Exercise
+
+Which team has scored the highest number of Home Runs (HR) in a year?
+```{webr}
+#| exercise: ex3_5
+bbBatting |> ______ |> ______ |> _______
+```
+
+
+::: { .hint exercise="ex3_5"}
+::: { .callout-note collapse="false"}
+Hint 1
+
+We can group by teamID, use slice_max, and then use arrange(desc). What column would this be applied to? 
+
+:::
+:::
+
+::: { .hint exercise="ex3_5"}
+::: { .callout-note collapse="false"}
+Hint 2
+
+bbBatting |> group_by(teamID) |> slice_max(HR,n = 1) |> arrange(desc(HR))
+
+This code can achieve what we want....but it's actually a trick question! Can you think of an easier way to get the same answer?
+
+:::
+:::
+
+::: { .solution exercise="ex3_5"}
+::: { .callout-note collapse="false"}
+
+bbBatting |> arrange(HR) |> tail()
+
+It's critical to think carefully about what our code is doing at all times, but more importantly to think about how our code relates to our question. Using group_by() and slice_max() works just fine, but it's important to realise that our question - which team has the highest number of HR - is really only about the HR column, and by arranging the dataset on HR we can find our answer. 
+
+:::
+:::
+
+Note: slice_min() and slice_max() keep ties! It is therefore possible to end up with more rows than you have groups. You can use the with_ties = False argument to remove this behaviour.
+
+
+## Conclusions
+
+group_by() is a very powerful function that gives you additional control over your dataset and the dplyr verbs.
+
+With group_by() we can analyse a dataset all at once while preserving internal substructure, calculating a range of useful summary statistics for each individual group with the summarize() function. The slice_() functions let us easily view individual rows from each group, which is useful for identifying min/max values per group and also for viewing a cross section of the data to verify it looks as expected. 
