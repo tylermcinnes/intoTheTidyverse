@@ -2,6 +2,8 @@
 title: "Into the tidyverse"
 subtitle: "Learn to use the tidyverse packages and style"
 author: "Dr. Tyler McInnes"
+about: 
+  template: trestles
 date: "Last updated: {{< meta last_modified >}}"
 format: live-html
 ---
